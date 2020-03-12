@@ -1,0 +1,98 @@
+
+a{
+  color: #363635;
+  text-decoration: none;
+}
+
+a:hover{
+  color: #757575;
+  text-decoration: none;
+}
+
+.fondoVioleta0{
+  background-color: #f2e6ff;
+}
+
+.fondoVioleta1{
+  background-color: #e7ddfb;
+}
+
+.txtVioletaOscur{
+  color: #4d0099;
+  animation-name: aparecer;
+  animation-duration: 1.5s;
+}
+
+.inputVioleta{
+  color: #661aff;
+  border: 3px solid #661aff;
+  -webkit-box-shadow: 5px 5px 6px -3px #661AFF;
+  box-shadow: 5px 5px 6px -3px #661AFF;
+}
+
+.inputVioleta:focus{
+  background-color: #cfb9fc;
+}
+
+.btnVioleta{
+  background-color: #661aff;
+  border: 3px solid #661aff;
+  color: #cfb9fc;
+  font-weight: bold;
+}
+
+.btnVioleta:hover{
+  background-color: #cfb9fc;
+  color: #661aff;
+  -webkit-box-shadow: 0px 0px 15px -3px #661AFF;
+  box-shadow: 0px 0px 15px -3px #661AFF;
+}
+
+.btnVioletaOutline{
+  background-color: #cfb9fc;
+  border: 3px solid #661aff;
+  color: #661aff;
+  font-weight: bold;
+}
+
+.btnVioletaOutline:hover{
+  background-color: #661aff;
+  color: #cfb9fc;
+  -webkit-box-shadow: 0px 0px 15px -3px #661AFF;
+  box-shadow: 0px 0px 15px -3px #661AFF;
+}
+
+.active{
+  border-bottom: 3px solid #cfb9fc;
+}
+
+.noactive:hover{
+  -webkit-box-shadow: 0 8px 6px -6px #cfb9fc;
+  box-shadow: 0 8px 6px -6px #cfb9fc;
+}
+
+.zoomIn{
+  animation-name: zoomIn;
+  animation-duration: 1s;
+}
+
+.zoomOut{
+  animation-name: zoomOut;
+  animation-duration: 1s;
+}
+
+.zoomOutRotative{
+  animation-name: zoomOutRotative;
+  animation-duration: 1s;
+}
+
+.txtOpacity{
+  opacity: 0.8;
+}
+
+.txtVioletaClar{
+  color: #e7ddfb;
+}
+.txtVioletaClar:hover{
+  color: #cfb9fc;
+}
