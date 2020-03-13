@@ -33,7 +33,22 @@
         <i class="fa fa-info-circle" aria-hidden="true"></i> Información
       </a>
     </li>
+    <li>
+      <a href="cerrarSesion.php">
+        <i class="fa fa-sign-out" aria-hidden="true"></i> Cerrar Sesión
+      </a>
+    </li>
+    <li class="header">Usuario actual:</li>
   </ul>
+  <div class="card fondoGrisOscuro cardNoBorder row justify-content-center">
+  <img class="col align-self-center shadow rounded-circle mt-3 w-75" src="imgs/img_user_prova.png" alt="Imagen de perfil">
+    <div class="card-body col">
+      <h4 class="card-title text-center font-weight-bold"><?php echo $_SESSION['usuarioLogueado']['user']; ?></h4>
+      <p class="card-text">
+
+      </p>
+    </div>
+  </div>
 </div>
 <script>
   cambiarPaginaActivaSide();

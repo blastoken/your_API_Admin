@@ -20,6 +20,14 @@ a:hover{
   background-color: var(--violetaMuyClaro1);
 }
 
+.fondoGrisOscuro{
+  background-color: var(--grisMuyOscuro0);
+}
+
+.cardNoBorder{
+  border: 0px solid black;
+}
+
 .tituloVioleta{
   color: var(--violetaOscuro);
   -webkit-box-shadow: 0 10px 5px -6px var(--violetaOscuro);

@@ -20,18 +20,24 @@
                 <li class="nav-item">
                   <a class="nav-link" href="proyecto.php">Proyecto</a>
                 </li>
+                <?php if(isset($_SESSION['usuarioLogueado'])){?>
+                <li class="nav-item">
+                  <a class="nav-link" href="cerrarSesion.php">Cerrar Sesión</a>
+                </li>
+              <?php }else{ ?>
                 <li class="nav-item">
                   <a class="nav-link" href="login.php">Log In</a>
                 </li>
+                <?php } ?>
               </ul>
             </div>
           </nav>
         </div>
     </div>
     <?php if(isset($_SESSION['usuarioLogueado'])){?>
-    <div class="row justify-content-center fondoTopBar absoluteTopRight m-2 float-xs-right">
-      <div class="col fondoTopBar text-center">
-        <p class="text-light text-center">Usuario logueado <strong><?php echo $_SESSION['usuarioLogueado']['user']?></strong></p>
+    <div class="row justify-content-center absoluteTopRight m-2 float-xs-right">
+      <div class="col">
+        <h1 class="display-4"><a href="controlPanel.php"><i class="fa fa-chevron-right txtVioletaClar ml-2" aria-hidden="true"></i></a></h1>
       </div>
     </div>
     <?php } ?>
