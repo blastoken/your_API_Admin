@@ -1,11 +1,4 @@
-
-a{
-  color: #363635;
-  text-decoration: none;
-}
-
 a:hover{
-  color: #757575;
   text-decoration: none;
 }
 
@@ -16,91 +9,91 @@ a:hover{
 }
 
 .fondoTopBar{
-  background-color: #7733ff;
+  background-color: var(--violetaMedio);
 }
 
 .fondoVioleta0{
-  background-color: #f2e6ff;
+  background-color: var(--violetaMuyClaro0);
 }
 
 .fondoVioleta1{
-  background-color: #e7ddfb;
+  background-color: var(--violetaMuyClaro1);
 }
 
 .tituloVioleta{
-  color: #661aff;
-  -webkit-box-shadow: 0 10px 5px -6px #661aff;
-  box-shadow: 0 10px 5px -6px #661aff;
+  color: var(--violetaOscuro);
+  -webkit-box-shadow: 0 10px 5px -6px var(--violetaOscuro);
+  box-shadow: 0 10px 5px -6px var(--violetaOscuro);
 }
 
 .txtVioletaOscur{
-  color: #4d0099;
+  color: var(--morado);
   animation-name: aparecer;
   animation-duration: 1.5s;
 }
 
 .inputVioleta{
-  color: #661aff;
-  border: 3px solid #661aff;
-  -webkit-box-shadow: 5px 5px 6px -3px #661AFF;
-  box-shadow: 5px 5px 6px -3px #661AFF;
+  color: var(--violetaOscuro);
+  border: 3px solid var(--violetaOscuro);
+  -webkit-box-shadow: 5px 5px 6px -3px var(--violetaOscuro);
+  box-shadow: 5px 5px 6px -3px var(--violetaOscuro);
 }
 
 .inputVioleta:focus{
-  background-color: #cfb9fc;
+  background-color: var(--violetaClaro);
 }
 
 .alert-danger{
-  color: #c92c39;
-  background-color: #fc97ba;
+  color: var(--rojo);
+  background-color: var(--rojoClaro);
 }
 
 .inputVioletaError{
-  color: #de476f;
-  border: 3px solid #de476f;
-  -webkit-box-shadow: 5px 5px 6px -3px #de476f;
-  box-shadow: 5px 5px 6px -3px #de476f;
+  color: var(--granateClaro);
+  border: 3px solid var(--granateClaro);
+  -webkit-box-shadow: 5px 5px 6px -3px var(--granateClaro);
+  box-shadow: 5px 5px 6px -3px var(--granateClaro);
 }
 
 .inputVioletaError:focus{
-  background-color: #cfb9fc;
+  background-color: var(--violetaClaro);
 }
 
 .btnVioleta{
-  background-color: #661aff;
-  border: 3px solid #661aff;
-  color: #cfb9fc;
+  background-color: var(--violetaOscuro);
+  border: 3px solid var(--violetaOscuro);
+  color: var(--violetaClaro);
   font-weight: bold;
 }
 
 .btnVioleta:hover{
-  background-color: #cfb9fc;
-  color: #661aff;
-  -webkit-box-shadow: 0px 0px 15px -3px #661aff;
-  box-shadow: 0px 0px 15px -3px #661aff;
+  background-color: var(--violetaClaro);
+  color: var(--violetaOscuro);
+  -webkit-box-shadow: 0px 0px 15px -3px var(--violetaOscuro);
+  box-shadow: 0px 0px 15px -3px var(--violetaOscuro);
 }
 
 .btnVioletaOutline{
-  background-color: #cfb9fc;
-  border: 3px solid #661aff;
-  color: #661aff;
+  background-color: var(--violetaClaro);
+  border: 3px solid var(--violetaOscuro);
+  color: var(--violetaOscuro);
   font-weight: bold;
 }
 
 .btnVioletaOutline:hover{
-  background-color: #661aff;
-  color: #cfb9fc;
-  -webkit-box-shadow: 0px 0px 15px -3px #661aff;
-  box-shadow: 0px 0px 15px -3px #661aff;
+  background-color: var(--violetaOscuro);
+  color: var(--violetaClaro);
+  -webkit-box-shadow: 0px 0px 15px -3px var(--violetaOscuro);
+  box-shadow: 0px 0px 15px -3px var(--violetaOscuro);
 }
 
 .active{
-  border-bottom: 3px solid #cfb9fc;
+  border-bottom: 3px solid var(--violetaClaro);
 }
 
 .noactive:hover{
-  -webkit-box-shadow: 0 8px 6px -6px #cfb9fc;
-  box-shadow: 0 8px 6px -6px #cfb9fc;
+  -webkit-box-shadow: 0 8px 6px -6px var(--violetaClaro);
+  box-shadow: 0 8px 6px -6px var(--violetaClaro);
 }
 
 .zoomIn{
@@ -123,8 +116,8 @@ a:hover{
 }
 
 .txtVioletaClar{
-  color: #e7ddfb;
+  color: var(--violetaMuyClaro1);
 }
 .txtVioletaClar:hover{
-  color: #cfb9fc;
+  color: var(--violetaClaro);
 }
