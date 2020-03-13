@@ -1,9 +1,9 @@
 <?php
     return[
         'database'=>[
-            'name'=>'proyecto_iaw',
-            'username'=>'proyectoiaw',
-            'password'=>'proyectoiaw',
+            'name'=>'your_api_admin',
+            'username'=>'yourapiadmin',
+            'password'=>'yourapiadmin',
             'connection'=>'mysql:host=localhost',
             'options'=>[
                 PDO::MYSQL_ATTR_INIT_COMMAND=>"SET NAMES utf8",

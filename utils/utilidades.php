@@ -32,6 +32,9 @@ function esUnaPassFuerte($pass){
   if($pass === preg_replace('\[A-Z\]','',$pass)){
     return false;
   }
+  if($pass === preg_replace('\[0-9\]','',$pass)){
+    return false;
+  }
   return true;
 }
 
@@ -43,30 +46,6 @@ function hayCamposVacios($usuario){
     }
   }
   return $errores;
-}
-
-function getUsers(){
-  $usuarios = [];
-  $file = "files/usuarios.txt";
-  if(file_exists($file)){
-    $fichero = fopen($file,"r");
-    while(!feof($fichero)){
-      $linia = fgets($fichero);
-      $atributes = explode(";", $linia);
-      if($linia!=""){
-        array_push($usuarios,
-        array(
-          'nombre' =>  $atributes[0],
-          'apellidos' => $atributes[1],
-          'usuario' => $atributes[2],
-          'pass' =>  $atributes[3],
-          'pass2' =>  $atributes[3])
-        );
-      }
-    }
-    fclose($fichero);
-  }
-  return $usuarios;
 }
 
 function comprobacionLogin($user, $pass){

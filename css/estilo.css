@@ -9,12 +9,28 @@ a:hover{
   text-decoration: none;
 }
 
+.absoluteTopRight{
+  position: absolute;
+  top:0;
+  right:0;
+}
+
+.fondoTopBar{
+  background-color: #7733ff;
+}
+
 .fondoVioleta0{
   background-color: #f2e6ff;
 }
 
 .fondoVioleta1{
   background-color: #e7ddfb;
+}
+
+.tituloVioleta{
+  color: #661aff;
+  -webkit-box-shadow: 0 10px 5px -6px #661aff;
+  box-shadow: 0 10px 5px -6px #661aff;
 }
 
 .txtVioletaOscur{
@@ -34,6 +50,22 @@ a:hover{
   background-color: #cfb9fc;
 }
 
+.alert-danger{
+  color: #c92c39;
+  background-color: #fc97ba;
+}
+
+.inputVioletaError{
+  color: #de476f;
+  border: 3px solid #de476f;
+  -webkit-box-shadow: 5px 5px 6px -3px #de476f;
+  box-shadow: 5px 5px 6px -3px #de476f;
+}
+
+.inputVioletaError:focus{
+  background-color: #cfb9fc;
+}
+
 .btnVioleta{
   background-color: #661aff;
   border: 3px solid #661aff;
@@ -44,8 +76,8 @@ a:hover{
 .btnVioleta:hover{
   background-color: #cfb9fc;
   color: #661aff;
-  -webkit-box-shadow: 0px 0px 15px -3px #661AFF;
-  box-shadow: 0px 0px 15px -3px #661AFF;
+  -webkit-box-shadow: 0px 0px 15px -3px #661aff;
+  box-shadow: 0px 0px 15px -3px #661aff;
 }
 
 .btnVioletaOutline{
@@ -58,8 +90,8 @@ a:hover{
 .btnVioletaOutline:hover{
   background-color: #661aff;
   color: #cfb9fc;
-  -webkit-box-shadow: 0px 0px 15px -3px #661AFF;
-  box-shadow: 0px 0px 15px -3px #661AFF;
+  -webkit-box-shadow: 0px 0px 15px -3px #661aff;
+  box-shadow: 0px 0px 15px -3px #661aff;
 }
 
 .active{
