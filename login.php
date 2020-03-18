@@ -5,26 +5,28 @@ include_once("views/partials/nav.view.php");
 require 'database/Connection.php';
 require 'database/UsuariosBD.php';
 require 'entities/Usuario.php';
-
-$usuario = "";
+$config=require_once 'app/local.php';
+$connection = Connection::make($config['database']);
+$usuariosBD = new UsuariosBD($connection);
+$email = "";
 $pass = "";
 $errores = array();
 if(isset($_POST['btnLogin'])){
-  $usuario = $_POST['usuario'];
+  $email = $_POST['email'];
   $pass = $_POST['pass'];
-  if($usuario !== "" && $pass !== ""){
+  if($email !== "" && $pass !== ""){
     try{
-      $config=require_once 'app/local.php';
-      $connection = Connection::make($config['database']);
-      $usuariosBD = new UsuariosBD($connection);
-      $oUsuario = $usuariosBD->comprobarLogin($usuario,$pass);
+      $oUsuario = $usuariosBD->comprobarLogin($email,$pass);
       if(sizeof($oUsuario) > 0){
         $oUsuario = $oUsuario[0];
         $_SESSION['usuarioLogueado'] = array(
           'id' => $oUsuario->getId(),
-          'user' => $oUsuario->getUser(),
+          'nombre' => $oUsuario->getNombre(),
+          'apellidos' => $oUsuario->getApellidos(),
           'email' => $oUsuario->getEmail(),
-          'password' => $oUsuario->getPassword()
+          'password' => $oUsuario->getPassword(),
+          'img' => $oUsuario->getRutaImg(),
+          'registro' => $oUsuario->getRegistro()
         );
           header("Location: controlPanel.php");
           die();
@@ -43,11 +45,36 @@ if(isset($_POST['btnRegistro'])){
   header("Location: registro.php");
   die();
 }
+
+if(isset($_GET['action'])){
+  $email = $_GET['email'];
+  $pass = $_GET['pass'];
+  try{
+    $oUsuario = $usuariosBD->comprobarLogin($email,$pass);
+    if(sizeof($oUsuario) > 0){
+      $oUsuario = $oUsuario[0];
+      $_SESSION['usuarioLogueado'] = array(
+        'id' => $oUsuario->getId(),
+        'nombre' => $oUsuario->getNombre(),
+        'apellidos' => $oUsuario->getApellidos(),
+        'email' => $oUsuario->getEmail(),
+        'password' => $oUsuario->getPassword(),
+        'img' => $oUsuario->getRutaImg(),
+        'registro' => $oUsuario->getRegistro()
+      );
+        header("Location: controlPanel.php");
+        die();
+      }
+    }catch(QueryBuilderException $queryBuilderException){
+      array_push($errores,$queryBuilderException->getMessage());
+    }
+}
+
 include_once("views/login.view.php");
 if(sizeof($errores) > 0){
   echo "
   <script>
-    addClaseByIdElement(\"inputVioletaError\",\"usuario\");
+    addClaseByIdElement(\"inputVioletaError\",\"email\");
     addClaseByIdElement(\"inputVioletaError\",\"pass\");
   </script>";
 }

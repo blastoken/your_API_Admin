@@ -1,27 +1,34 @@
 <?php
-function validarCampos($usuario){
+function validarCamposRegistro($usuario){
   $errores = hayCamposVacios($usuario);
   if($usuario['pass'] !== ""){
-
     if(!esUnaPassFuerte($usuario['pass'])){
-      array_push($errores, "La contraseña debe contener mayúsculas y minúsculas");
+      if(isset($errores['pass'])){
+        array_push($errores['pass'], "La contraseña debe contener mayúsculas, minúsculas y números");
+      }else{
+        $errores['pass'] = array("La contraseña debe contener mayúsculas, minúsculas y números");
+      }
+      if(!isset($errores['pass2'])){
+        $errores['pass2'] = array("");
+      }
     }
+
 
     if($usuario['pass2'] !== ""){
       if($usuario['pass'] !== $usuario['pass2']){
-        array_push($errores, "Las contraseñas deben de coincidir");
+        if(isset($errores['pass'])){
+          array_push($errores['pass'], "Las contraseñas deben de coincidir");
+        }else{
+          $errores['pass'] = array("Las contraseñas deben de coincidir");
+        }
+        if(!isset($errores['pass2'])){
+          $errores['pass2'] = array("");
+        }
       }
     }
 
   }
 
-  if($usuario['usuario'] !== ""){
-    if(strlen($usuario['usuario']) <= 10){
-      array_push($errores, "El campo usuario debe ser mayor de 10 carácteres");
-    }
-  }else{
-    array_push($errores, "El campo usuario no puede estar vacío");
-  }
   return $errores;
 }
 
@@ -42,67 +49,13 @@ function hayCamposVacios($usuario){
   $errores = array();
   foreach($usuario as $campo => $valor){
     if($valor === ""){
-      array_push($errores, "El campo ".$campo." no puede estar vacío");
+      $errores[$campo] = array("El campo ".$campo." no puede estar vacío");
     }
   }
   return $errores;
 }
 
-function comprobacionLogin($user, $pass){
-  $usuarios = getUsers();
-  foreach ($usuarios as $usuario) {
-    if($user===$usuario['usuario']){
-      if($pass===$usuario['pass']){
-        return true;
-      }
-    }
-  }
-  return false;
-}
-
-function getUserByUsuario($usuario){
-  $file = "files/usuarios.txt";
-  if(file_exists($file)){
-    $fichero = fopen($file,"r");
-    while(!feof($fichero)){
-      $linia = fgets($fichero);
-      $atributes = explode(";", $linia);
-      if($linia!=""){
-        if($usuario===$atributes[2]){
-          fclose($fichero);
-          return array(
-            'nombre' =>  $atributes[0],
-            'apellidos' => $atributes[1],
-            'usuario' => $atributes[2],
-            'pass' =>  $atributes[3],
-            'pass2' =>  $atributes[3]
-          );
-        }
-      }
-    }
-    fclose($fichero);
-  }
-  return [];
-}
-
-function signupUser($usuario){
-  $file = "files/usuarios.txt";
-  if(file_exists($file)){
-    $fichero = fopen($file,"a");
-  }else{
-    $fichero = fopen($file,"w");
-  }
-  if(sizeof(getUserByUsuario($usuario)) == 0){
-    $linia = $usuario['nombre'].";".$usuario['apellidos'].";".$usuario['usuario'].";".$usuario['pass'].";";
-    fwrite($fichero,$linia."\n");
-  }else{
-    return false;
-  }
-  fclose($fichero);
-  return true;
-}
-
-function validarFichero($fichero){
+function validarImg($fichero){
     $errorVal=[];
     $tipoError=$fichero['error'];
     $arrTypes=['image/jpeg', 'image/png', 'image/gif'];
@@ -132,6 +85,18 @@ function validarFichero($fichero){
 
 
     return $errorVal;
+}
+
+function unificarArrays($arr){
+  $arrTodos = array();
+  foreach ($arr as $key => $value) {
+    foreach($value as $error){
+      if($error!== ""){
+        array_push($arrTodos,$error);
+      }
+    }
+  }
+  return $arrTodos;
 }
 
 ?>

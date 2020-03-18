@@ -26,20 +26,7 @@ class QueryBuilder
      * @return array
      * @throws QueryException
      */
-    public function comprobarLogin():array{
-        $sql="SELECT * FROM $this->tabla";
-        $pdoStatement=$this->connection->prepare($sql);
-        if($pdoStatement->execute()===false){
-            throw new QueryBuilderException("No se ha podido ejecutar la Query");
-        }
-        return $pdoStatement->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE,
-            $this->classEntity);
-    }
 
-    /**
-     * @return array
-     * @throws QueryException
-     */
     public function findAll():array{
         $sql="SELECT * FROM $this->tabla";
         $pdoStatement=$this->connection->prepare($sql);

@@ -114,6 +114,11 @@ a:hover{
   animation-duration: 1s;
 }
 
+.aparecer{
+  animation-name: aparecer;
+  animation-duration: 1s;
+}
+
 .zoomOutRotative{
   animation-name: zoomOutRotative;
   animation-duration: 1s;
@@ -128,4 +133,25 @@ a:hover{
 }
 .txtVioletaClar:hover{
   color: var(--violetaClaro);
+}
+
+.fileUploadVioleta{
+    color: var(--violetaMedio);
+    border: 2px dashed var(--violetaMedio);
+    height: 60px;
+}
+
+.fileUploadVioleta:hover{
+  color: var(--violetaMedio);
+  border: 2px hidden var(--violetaMedio);
+  background-color: var(--violetaMuyClaro1);
+}
+
+.fileUploader{
+  width: 0.1px;
+ height: 0.1px;
+ opacity: 0;
+ overflow: hidden;
+ position: absolute;
+ z-index: -1;
 }

@@ -14,7 +14,7 @@
       </div>
     <?php } ?>
       <form class="mr-5 ml-5 mt-2" method="post">
-          <input type="text" id="usuario" name="usuario" value="<?php echo $usuario; ?>" class="form-control-lg text-center mb-3 w-100 inputVioleta" placeholder="Usuario">
+          <input type="text" id="email" name="email" value="<?php echo $email; ?>" class="form-control-lg text-center mb-3 w-100 inputVioleta" placeholder="Email">
           <input type="password" id="pass" name="pass" value="<?php echo $pass; ?>" class="form-control-lg text-center mb-3 w-100 inputVioleta" placeholder="Contraseña">
           <input id="login" type="submit" name="btnLogin" value="Login" class="btn btn-lg w-100 mt-2 btnVioleta"/>
           <input id="registro" type="submit" name="btnRegistro" value="Registro"  class="btn btn-lg w-100 mt-1 btnVioletaOutline"/>
