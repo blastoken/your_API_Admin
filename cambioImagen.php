@@ -23,7 +23,7 @@ if(isset($_POST['page'])){
         $img = $ruta;
 
         if($usuariosBD->cambioImagenPerfil($id, $nombreFichero)){
-          if($_SESSION['usuarioLogueado']['img']!=="default.png"){
+          if($_SESSION['usuarioLogueado']['img']!=="imgs/perfil/default.png"){
             unlink($_SESSION['usuarioLogueado']['img']);
           }
           $_SESSION['usuarioLogueado']['img'] = $ruta;

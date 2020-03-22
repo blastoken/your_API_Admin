@@ -45,7 +45,7 @@
       <img class="rounded-circle" src="<?php echo $_SESSION['usuarioLogueado']['img']; ?>" alt="Imagen de perfil" height="200px" width="200px">
     </div>
     <form method="post" action="cambioImagen.php" enctype="multipart/form-data" class="col align-self-center float-left position-absolute align-top h-75 ml-4">
-      <input type="hidden" id="page" name="page" value="<?php echo "controlPanel.php"; ?>" />
+      <input type="hidden" id="page" name="page" value="<?php echo $_SESSION['page']; ?>" />
       <input type="hidden" id="id" name="id" value="<?php echo $_SESSION['usuarioLogueado']['id']; ?>" />
       <label for="img"><img src="imgs/img.png" alt="Cambiar Imagen" height="40px"></label>
       <input type="file" id="img" name="img" class="invisible" onchange="this.form.submit()"/>
@@ -65,7 +65,7 @@
   </div>
 </div>
 <?php
-  /*Error d'exemple*/
+  /*Error d'exemple
   $_SESSION['errores'] = array();
   array_push($_SESSION['errores'],"No se ha podido verificar tu cara de rata");
   /**/
