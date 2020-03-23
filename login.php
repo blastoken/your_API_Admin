@@ -16,22 +16,26 @@ if(isset($_POST['btnLogin'])){
   $pass = $_POST['pass'];
   if($email !== "" && $pass !== ""){
     try{
-      $oUsuario = $usuariosBD->comprobarLogin($email,$pass);
+      $oUsuario = $usuariosBD->comprobarLogin($email);
       if(sizeof($oUsuario) > 0){
         $oUsuario = $oUsuario[0];
-        $_SESSION['usuarioLogueado'] = array(
-          'id' => $oUsuario->getId(),
-          'nombre' => $oUsuario->getNombre(),
-          'apellidos' => $oUsuario->getApellidos(),
-          'email' => $oUsuario->getEmail(),
-          'password' => $oUsuario->getPassword(),
-          'img' => $oUsuario->getRutaImg(),
-          'registro' => $oUsuario->getRegistro()
-        );
-          header("Location: controlPanel.php");
-          die();
+        if(password_verify($pass, $oUsuario->getPassword())){
+          $_SESSION['usuarioLogueado'] = array(
+            'id' => $oUsuario->getId(),
+            'nombre' => $oUsuario->getNombre(),
+            'apellidos' => $oUsuario->getApellidos(),
+            'email' => $oUsuario->getEmail(),
+            'password' => $oUsuario->getPassword(),
+            'img' => $oUsuario->getRutaImg(),
+            'registro' => $oUsuario->getRegistro()
+            );
+            header("Location: controlPanel.php");
+            die();
+          }else{
+            array_push($errores, "Contraseña incorrecta...");
+          }
       }else{
-        array_push($errores, "Usuario o contraseña incorrectos...");
+        array_push($errores, "No existe este usuario...");
       }
     }catch(QueryBuilderException $queryBuilderException){
         array_push($errores,$queryBuilderException->getMessage());

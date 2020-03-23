@@ -24,13 +24,11 @@ class UsuariosBD
      * @return array
      * @throws QueryException
      */
-    public function comprobarLogin($email, $pass){
-        $sql="SELECT * FROM $this->tabla WHERE email = :email AND password = :password";
+    public function comprobarLogin($email){
+        $sql="SELECT * FROM $this->tabla WHERE email = :email";
         $pdoStatement=$this->connection->prepare($sql);
         $email = htmlspecialchars(strip_tags($email));
-        $pass = htmlspecialchars(strip_tags($pass));
         $pdoStatement->bindParam(":email", $email);
-        $pdoStatement->bindParam(":password", $pass);
 
         if($pdoStatement->execute()===false){
             throw new QueryBuilderException("No se ha podido comprobar el inicio de sesión...");

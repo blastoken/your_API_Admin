@@ -32,6 +32,7 @@ if(isset($_POST['registrarse'])){
       $usuariosBD = new UsuariosBD($connection);
       if($usuariosBD->existeEmail($usuario['email'])){
         $queryBuilder = new QueryBuilder($connection,'usuarios','Usuario');
+        $pass = password_hash($pass, PASSWORD_BCRYPT, array('cost' => 15));
         $user = new Usuario(0, $nombre, $apellidos, $email, $pass, "default.png", date('Y-m-d H:i:s'));
         $queryBuilder->save($user);
       }else{
