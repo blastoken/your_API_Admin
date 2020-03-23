@@ -131,6 +131,7 @@ a:hover{
 .txtVioletaClar{
   color: var(--violetaMuyClaro1);
 }
+
 .txtVioletaClar:hover{
   color: var(--violetaClaro);
 }

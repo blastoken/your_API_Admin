@@ -5,6 +5,10 @@ include_once("views/partials/nav.view.php");
 require 'database/Connection.php';
 require 'database/UsuariosBD.php';
 require 'entities/Usuario.php';
+if(isset($_SESSION['usuarioLogueado'])){
+  header("Location: controlPanel.php");
+  die();
+}
 $config=require_once 'app/local.php';
 $connection = Connection::make($config['database']);
 $usuariosBD = new UsuariosBD($connection);

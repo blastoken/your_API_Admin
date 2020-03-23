@@ -25,6 +25,17 @@ function addClaseByIdElement(clase, id){
   element.attributes.class.nodeValue += " ".concat(clase);
 }
 
+function deleteClaseByIdElement(clase, id){
+  var element = document.getElementById(id);
+  let clases = element.attributes.class.nodeValue.split(" ");
+  let valueClases;
+  for (var i = 0; i <= clases.length-1; i++) {
+    if(clases[i] != clase){
+      valueClases += clases[i].concat(" ");
+    }
+  }
+}
+
 function cambiarPaginaActivaSide(){
   var ul = document.getElementById("menuLateral");
   var pagActual = location.href.split("/");
