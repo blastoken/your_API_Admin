@@ -14,9 +14,9 @@
     <?php if(sizeof($todasBasesDatos) > 0){ ?>
     <div class="row justify-content-center align-items-center">
       <?php foreach ($todasBasesDatos as $db) { ?>
-        <div class="col-3 btnVioletaOutline rounded p-5 m-2 text-center">
+        <a href="tablasbdyaa.php?bd=<?php echo $db->getNombre(); ?>" class="btn col-3 btnVioletaOutline rounded p-5 m-2 text-center text-decoration-none">
           <h5 class="font-weight-bold text-monospace"><?php echo $db->getNombre(); ?></h5>
-        </div>
+        </a>
       <?php } ?>
     </div>
   <?php } ?>

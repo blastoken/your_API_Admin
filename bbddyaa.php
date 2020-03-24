@@ -3,6 +3,7 @@ session_start();
 require 'database/Connection.php';
 require 'database/QueryBuilder.php';
 require 'database/BaseDatosBD.php';
+require 'database/RootDB.php';
 require 'entities/BBDD.php';
 require 'utils/utilidades.php';
 if(!isset($_SESSION['usuarioLogueado'])){
@@ -30,9 +31,17 @@ if(isset($_POST['crearbd'])){
     try{
       $BaseDatosBD = new BaseDatosBD($connection);
       if($BaseDatosBD->existeDB($bbdd->getNombre())){
-        $encrypted = password_hash($passbbdd, PASSWORD_BCRYPT, array('cost' => 15));
-        $bbdd->setPass($encrypted);
-        $queryBuilder->save($bbdd);
+        $rootDB = new RootDB($connection);
+        if($rootDB->createDB($nombbdd)){
+          if($rootDB->createUserDB($userbbdd,$passbbdd)){
+            if($rootDB->grantUserDB($nombbdd,$userbbdd)){
+              $encrypted = password_hash($passbbdd, PASSWORD_BCRYPT, array('cost' => 15));
+              $bbdd->setPass($encrypted);
+              $queryBuilder->save($bbdd);
+              createDBConfig($nombbdd,$userbbdd,$passbbdd);
+            }
+          }
+        }
       }else{
         array_push($_SESSION['errores'],array("Ya hay registrado una Base de Datos con este Nombre"));
       }

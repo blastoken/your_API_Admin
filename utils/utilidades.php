@@ -99,4 +99,25 @@ function unificarArrays($arr){
   return $arrTodos;
 }
 
+function createDBConfig($nombbdd, $userbbdd, $passbbdd){
+  $ruta = "app/ddbbs/".$nombbdd.".php";
+  $file = fopen($ruta,'w');
+  $content = "<?php
+      return[
+          'database'=>[
+              'name'=>'".$nombbdd."',
+              'username'=>'".$userbbdd."',
+              'password'=>'".$passbbdd."',
+              'connection'=>'mysql:host=localhost',
+              'options'=>[
+                  PDO::MYSQL_ATTR_INIT_COMMAND=>\"SET NAMES utf8\",
+                  PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION,
+                  PDO::ATTR_PERSISTENT=>true
+              ]
+          ]
+      ];";
+  fwrite($file,$content);
+  fclose($file);
+}
+
 ?>
