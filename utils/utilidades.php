@@ -120,4 +120,21 @@ function createDBConfig($nombbdd, $userbbdd, $passbbdd){
   fclose($file);
 }
 
+function getTablasFromColumns($columns){
+  $tablasNames = array();
+  foreach ($columns as $column) {
+    if(!in_array($column->getTabla(), $tablasNames)){
+      array_push($tablasNames, $column->getTabla());
+    }
+  }
+  $tablas = array();
+  foreach($tablasNames as $name){
+    $tablas[$name] = array();
+  }
+  foreach ($columns as $column) {
+    array_push($tablas[$column->getTabla()], $column);
+  }
+  return $tablas;
+}
+
 ?>

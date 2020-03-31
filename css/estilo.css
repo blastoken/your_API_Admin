@@ -28,6 +28,33 @@ a:hover{
   border: 0px solid black;
 }
 
+.tablaVioleta{
+  border: 3px solid var(--violetaOscuro);
+  color: var(--violetaOscuro);
+}
+
+.tablaVioleta:hover{
+  -webkit-box-shadow: 0px 0px 15px -3px var(--violetaOscuro);
+  box-shadow: 0px 0px 15px -3px var(--violetaOscuro);
+}
+
+.tablaVioletaHeader{
+  background-color: var(--violetaOscuro);
+  color: var(--violetaClaro);
+}
+
+.tablaVioleta tr{
+  border: 2px solid var(--violetaOscuro);
+}
+
+.tablaVioleta tr a{
+  color:  var(--violetaOscuro);
+}
+
+.tablaVioleta tr a:hover{
+  color:  var(--violetaClaro);
+}
+
 .tituloVioleta{
   color: var(--violetaOscuro);
   -webkit-box-shadow: 0 10px 5px -6px var(--violetaOscuro);
@@ -155,4 +182,18 @@ a:hover{
  overflow: hidden;
  position: absolute;
  z-index: -1;
+}
+
+.txtVioletaP{
+  color: var(--violetaOscuro);
+}
+
+.hrVioleta{
+  border: 1px solid var(--violetaOscuro);
+}
+
+.sinFlecha{
+  appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
 }
