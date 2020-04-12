@@ -45,9 +45,9 @@ function esUnaPassFuerte($pass){
   return true;
 }
 
-function hayCamposVacios($usuario){
+function hayCamposVacios($obj){
   $errores = array();
-  foreach($usuario as $campo => $valor){
+  foreach($obj as $campo => $valor){
     if($valor === ""){
       $errores[$campo] = array("El campo ".$campo." no puede estar vacío");
     }
@@ -137,4 +137,205 @@ function getTablasFromColumns($columns){
   return $tablas;
 }
 
+function comprobarColumnasFormulario($columna,$i){
+  $errores = array();
+  if($columna->getTipo() === ""){
+    if($columna->getNombre() === ""){
+      array_push($errores,"Nombre y tipo no definidos en columna ".$i."...");
+    }else{
+      array_push($errores,"Tipo no definido para la columna ".$columna->getNombre());
+    }
+  }
+  if($columna->getNombre() !== ""){
+    if(strpos($columna->getNombre()," ")){
+      $columna->setNombre(explode($columna->getNombre()," ")[0]);
+    }
+  }else{
+    array_push($errores,"Nombre no definido en columna ".$i."...");
+  }
+  if($columna->getLength() == 0 && $columna->getTipo() !== "timestamp" && $columna->getTipo() !== "date"){
+    array_push($errores,"Tamaño no definido en columna ".$i."...");
+  }
+  return $errores;
+}
+
+function crearEntidad($bd, $nomTaula, $columnas){
+  $ruta = "entities/".$bd;
+  if(!file_exists($ruta)){
+    mkdir($ruta);
+  }
+  $ficheroEntidad = fopen($ruta."/".$nomTaula.".php","w");
+  $content = "<?php
+class ".$nomTaula."{
+    ";
+
+  foreach ($columnas as $clave => $columna) {
+    $content.=insertaCampo($columna);
+  }
+
+  $content .="
+  ".createConstructor($columnas)."
+  ";
+
+  foreach ($columnas as $clave => $columna) {
+    $content .= createGetter($columna);
+  }
+
+  foreach ($columnas as $clave => $columna) {
+    $content .= createSetter($columna);
+  }
+
+  $content .= createToArrayToView($columnas);
+
+  $content .= createToArray($columnas);
+
+  $content .= createSetFromArray($columnas);
+
+  $content.="
+}";
+
+  fwrite($ficheroEntidad,$content);
+  fclose($ficheroEntidad);
+}
+
+function insertaCampo($columna):string{
+  $content = "";
+  $content .= "/**
+   * @var ".convierteTipo($columna->getTipo())."
+   */
+   private $".$columna->getNombre().";
+   ";
+  return $content;
+}
+
+function convierteTipo($tipo):string{
+  switch($tipo){
+    case "int":
+      $convertido = "int";
+    break;
+    case "tinyint":
+      $convertido = "int";
+    break;
+    default:
+      $convertido = "string";
+    break;
+  }
+  return $convertido;
+}
+
+function createConstructor($columnas):string{
+  $content = "";
+  $content .= "public function __construct(";
+  $content .="$".$columnas[0]->getNombre()."=";
+  if($columnas[0]->getTipo() === "int" || $columnas[0]->getTipo() === "tinyint"){
+    $content .="0";
+  }else{
+    $content .="\"\"";
+  }
+  for ($i=1; $i < sizeof($columnas); $i++) {
+    $content .=",$".$columnas[$i]->getNombre()."=";
+    if($columnas[$i]->getTipo() === "int" || $columnas[$i]->getTipo() === "tinyint"){
+      $content .="0";
+    }else{
+      $content .="\"\"";
+    }
+  }
+  $content .=")
+  {";
+  foreach ($columnas as $clave => $columna) {
+    $content .="
+    $"."this->".$columna->getNombre()." = $".$columna->getNombre().";";
+  }
+  $content .= "
+  }
+";
+  return $content;
+}
+
+function createGetter($columna):string{
+  $content = "";
+  $content .= "public function get".$columna->getNombre()."():".convierteTipo($columna->getTipo())."
+  {
+      return $"."this->".$columna->getNombre().";
+  }
+
+  ";
+  return $content;
+}
+
+function createSetter($columna):string{
+  $content = "";
+  $content .= "public function set".$columna->getNombre()."($".$columna->getNombre().")
+  {
+      $"."this->".$columna->getNombre()." = $".$columna->getNombre().";
+  }
+
+  ";
+  return $content;
+}
+
+function createToArrayToView($columnas):string{
+  $content = "";
+  $content .= "public function toArrayToView():array
+  {
+    return [";
+  $content .="
+      '".$columnas[0]->getNombre()."'=>$"."this->get".$columnas[0]->getNombre()."()";
+  for ($i=1; $i < sizeof($columnas); $i++) {
+    $content .= ",
+      '".$columnas[$i]->getNombre()."'=>$"."this->get".$columnas[$i]->getNombre()."()";
+  }
+  $content .="
+    ];
+  }
+";
+  return $content;
+}
+
+function createToArray($columnas):string{
+  $inside = "";
+  $content = "";
+  $content .= "
+  public function toArray():array
+  {
+    return [";
+  foreach ($columnas as $clave => $columna) {
+    if($columna->getIndice() === ""){
+    $inside .= ",
+      '".$columna->getNombre()."'=>$"."this->get".$columna->getNombre()."()";
+    }
+  }
+  $inside = substr($inside,1,strlen($inside)-1);
+  $content .= $inside."
+    ];
+  }
+";
+  return $content;
+}
+
+function createSetFromArray($columnas):string{
+  $inside = "";
+  $content = "";
+  $content .= "
+  public function setFromArray($"."array):
+  {
+    ";
+    foreach ($columnas as $columna) {
+      $content .= "$"."this->".$columna->getNombre().";
+    ";
+    }
+  "}
+";
+  return $content;
+}
+
+function getIdsName($columnas):string
+{
+  foreach ($columnas as $columna) {
+    if($columna->getIndice() !== ""){
+      return $columna->getNombre();
+    }
+  }
+  return "id";
+}
 ?>

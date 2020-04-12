@@ -48,3 +48,24 @@ function cambiarPaginaActivaSide(){
     }
   }
 }
+
+function cambioImagen(id, img){
+  let imagen = document.getElementById(id);
+  imagen.src= img;
+}
+
+function getValuesToModal(tabla, num){
+  let taula = document.getElementById(tabla);
+  var formulario = document.getElementById("formularioModal");
+  //console.log(taula);
+  console.log(formulario);
+  let cells = taula.rows[num].cells;
+
+  for (var i = 0; i < cells.length-1; i++) {
+    formulario[i].value = cells[i].innerText;
+  }
+  formulario.lastElementChild.value = "Actualizar";
+  formulario.lastElementChild.id = "update";
+  formulario.lastElementChild.name = "update";
+  console.log(num);
+}

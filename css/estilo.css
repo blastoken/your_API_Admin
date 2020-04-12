@@ -55,6 +55,18 @@ a:hover{
   color:  var(--violetaClaro);
 }
 
+.tablaVioletaHeader button i{
+  color: var(--violetaClaro);
+}
+
+.tablaVioletaHeader button i:hover{
+  color: var(--violetaMuyClaro0);
+}
+
+.tablaVioletaHeader button i:focus{
+  border: solid white 0px;
+}
+
 .tituloVioleta{
   color: var(--violetaOscuro);
   -webkit-box-shadow: 0 10px 5px -6px var(--violetaOscuro);
@@ -262,4 +274,18 @@ a:hover{
 label:hover:before {
     border: 2px solid var(--violetaOscuro)!important;
     background: #ffffff
+}
+
+.dropdown-menu li:hover{
+}
+
+.dropdown-menu li a{
+  width: 100%;
+  display: inline-block;
+}
+
+.dropdown-menu li a:hover{
+  border-bottom: 2px solid var(--violetaClaro);
+  background-color: var(--violetaMuyClaro1);
+  padding-bottom: 2px;
 }

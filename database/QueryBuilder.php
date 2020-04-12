@@ -1,8 +1,7 @@
 <?php
 require_once __DIR__ . '/../exceptions/QueryBuilderException.php';
 
-class QueryBuilder
-{
+class QueryBuilder{
     /**
      * @var PDO
      */
@@ -24,9 +23,8 @@ class QueryBuilder
 
     /**
      * @return array
-     * @throws QueryException
+     * @throws QueryBuilderException
      */
-
     public function findAll():array{
         $sql="SELECT * FROM $this->tabla";
         $pdoStatement=$this->connection->prepare($sql);
@@ -35,54 +33,86 @@ class QueryBuilder
         }
         return $pdoStatement->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE,
             $this->classEntity);
+
     }
 
     /**
      * @param $entity
      * @throws QueryException
      */
-     public function save($entity){
-         try{
-             $parameters=$entity->toArray();
-             $sql=sprintf(
-                 'INSERT INTO %s (%s) VALUES (%s)',
-             $this->tabla,
-             implode(', ', array_keys($parameters)),
-             ':' . implode(', :', array_keys($parameters))
-             );
+    public function save($entity){
+        try{
+            $parameters=$entity->toArray();
+            $sql=sprintf(
+                'INSERT INTO %s (%s) VALUES (%s)',
+            $this->tabla,
+            implode(', ', array_keys($parameters)),
+            ':' . implode(', :', array_keys($parameters))
+            );
 
-             $pdoStatement=$this->connection->prepare($sql);
+            $pdoStatement=$this->connection->prepare($sql);
+            $pdoStatement->execute($parameters);
+        }catch(PDOException $exception){
+            throw new QueryBuilderException('Error al insertar ' . $sql);
+        }
+    }
 
-             $pdoStatement->execute($parameters);
+    /**
+     * @param $entity
+     * @throws QueryBuilderException
+     */
+    public function update($entity,$nomId,$valorId){
+        try{
+            $parameters=$entity->toArray();
+            $update=[];
+            foreach ($parameters as $key=>$valor){
+                $update[] = "$key = :$key";
+            }
+            $sql=sprintf(
+                'UPDATE %s SET %s WHERE %s=%s',
+                $this->tabla,
+                implode(',', $update),
+                $nomId,
+                $valorId
+            );
+            $pdoStatement=$this->connection->prepare($sql);
+            $pdoStatement->execute($parameters);
+        }catch(PDOException $exception){
+            throw new QueryBuilderException('Error al modificar ' . $sql);
+        }
+    }
 
-         }catch(PDOException $exception){
-             throw new QueryBuilderException('Error al insertar ' . $sql);
-         }
-     }
+    /**
+     * @param $entity
+     * @throws QueryBuilderException
+     */
+    public function delete($nomId,$valorId){
+        try{
+            //$parameters=$entity->toArray();
+            $sql=sprintf(
+                'DELETE FROM %s WHERE %s=%s',
+                $this->tabla,
+                $nomId,
+                $valorId
+            );
+            $pdoStatement=$this->connection->prepare($sql);
+            $pdoStatement->execute(/*$parameters*/);
+        }catch(PDOException $exception){
+            throw new QueryBuilderException('Error al borrar ' . $sql);
+        }
+    }
 
-     public function delete($id){
-         try{
-             $sql = "DELETE FROM ".$this->tabla." WHERE id = ".$id;
+    /**
+     * @param $id
+     * @return array
+     * @throws QueryBuilderException
+     */
+    public function findById($id){
+        $sql="SELECT * FROM $this->tabla WHERE id=$id";
+        $pdoStatement=$this->connection->prepare($sql);
+        if ($pdoStatement->execute()===false)
+            throw new QueryBuilderException("No se ha podido ejecutar la query");
+        return $pdoStatement->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->classEntity)[0];
+    }
 
-             $pdoStatement=$this->connection->prepare($sql);
-
-             $pdoStatement->execute();
-
-         }catch(PDOException $exception){
-             throw new QueryBuilderException('Error al eliminar ' . $sql);
-         }
-     }
-
-     public function update($entity){
-         try{
-             $sql = "UPDATE ".$this->tabla." SET titulo = '".$entity->getTitulo()."', texto = '".$entity->getTexto()."', img = '".$entity->getImg()."' WHERE id = ".$entity->getId();
-
-             $pdoStatement=$this->connection->prepare($sql);
-
-             $pdoStatement->execute();
-
-         }catch(PDOException $exception){
-             throw new QueryBuilderException('Error al actualizar ' . $sql);
-         }
-     }
 }

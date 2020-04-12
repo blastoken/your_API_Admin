@@ -60,9 +60,15 @@ class RootDB
     }
 
     public function getAllTablesAndColumnsFromDB($nombbdd){
-      $sql="SELECT COLUMN_NAME AS nombre, TABLE_NAME AS tabla, COLUMN_TYPE AS tipo
-      FROM INFORMATION_SCHEMA.COLUMNS
-      WHERE TABLE_SCHEMA = :nombbdd;";
+      $sql="SELECT COLUMN_NAME as 'nombre', TABLE_NAME AS 'tabla', DATA_TYPE as 'tipo',
+            CASE DATA_TYPE
+            WHEN 'varchar' THEN CHARACTER_MAXIMUM_LENGTH
+            WHEN 'int' THEN (NUMERIC_PRECISION+1)
+            WHEN 'double' THEN CONCAT(NUMERIC_PRECISION,\".\",NUMERIC_SCALE)
+            ELSE ''
+            END as 'length', EXTRA AS 'extra', COLUMN_KEY AS 'indice'
+            FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_SCHEMA = :nombbdd;";
       $pdoStatement=$this->connection->prepare($sql);
       $nombbdd = htmlspecialchars(strip_tags($nombbdd));
       $pdoStatement->bindParam(":nombbdd", $nombbdd);
@@ -70,8 +76,29 @@ class RootDB
       if($pdoStatement->execute()===false){
           throw new QueryBuilderException("No se han podido leer las tablas de la Base de Datos...");
       }
-      return $pdoStatement->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE,
-          "Columns");
+      return $pdoStatement->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, "ColumnaTabla");
+    }
+
+    public function getAllColumnsFromTable($nombbdd, $nomTaula){
+      $sql="SELECT COLUMN_NAME as 'nombre', TABLE_NAME AS 'tabla', DATA_TYPE as 'tipo',
+            CASE DATA_TYPE
+            WHEN 'varchar' THEN CHARACTER_MAXIMUM_LENGTH
+            WHEN 'int' THEN (NUMERIC_PRECISION+1)
+            WHEN 'double' THEN CONCAT(NUMERIC_PRECISION,\".\",NUMERIC_SCALE)
+            ELSE ''
+            END as 'length', EXTRA AS 'extra', COLUMN_KEY AS 'indice'
+            FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_SCHEMA = :nombbdd; AND TABLE_NAME = :nomTaula";
+      $pdoStatement=$this->connection->prepare($sql);
+      $nombbdd = htmlspecialchars(strip_tags($nombbdd));
+      $pdoStatement->bindParam(":nombbdd", $nombbdd);
+      $nombbdd = htmlspecialchars(strip_tags($nomTaula));
+      $pdoStatement->bindParam(":nomTaula", $nomTaula);
+
+      if($pdoStatement->execute()===false){
+          throw new QueryBuilderException("No se han podido leer las tablas de la Base de Datos...");
+      }
+      return $pdoStatement->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, "ColumnaTabla");
     }
 
   }
