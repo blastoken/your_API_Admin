@@ -27,4 +27,14 @@ class RootTable
       return true;
     }
 
+    public function lanzarSentencias($sentencias){
+      $sql=implode($sentencias);
+      $pdoStatement=$this->connection->prepare($sql);
+
+      if($pdoStatement->execute()===false){
+          throw new QueryBuilderException("No se ha podido crear la tabla de la Base de Datos...");
+      }
+      return true;
+    }
+
   }

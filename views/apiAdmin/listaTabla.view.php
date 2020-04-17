@@ -3,10 +3,11 @@
   <div class="container-fluid">
 
     <h1 class="text-center txtVioletaOscur font-weight-bold"><?php echo $tabla; ?></h1>
-    <?php  if(sizeof($objetos) > 0){ ?>
+
     <table id="tabla<?php echo $tabla; ?>" class="table table-reflow tablaVioleta font-weight-bold">
         <?php
-          $claves = array_keys($objetos[0]->toArrayToView());
+          $nuevo = new $tabla();
+          $claves = array_keys($nuevo->toArrayToView());
           foreach ($claves as $clave) {
             ?>
             <th class="tablaVioletaHeader text-center pt-3"><?php echo $clave; ?></th>
@@ -16,6 +17,7 @@
         ?>
         <th class="tablaVioletaHeader text-center"><button type="button" data-toggle="modal" data-target="#exampleModal" class="btn w-100 h-100"><i class="fa fa-plus w-100 h-100"></i></button></th>
       <?php
+      if(sizeof($objetos) > 0){
       $claro1 = false;
       $fondo = "";
       $cont = 1;
@@ -49,10 +51,8 @@
        ?>
     </table>
 
-  <?php }else{ ?>
-    <h4 class="font-italic">Aún no hay datos en la tabla...</h4>
-
-  <?php } ?>
+  <?php }
+  ?>
 
   <div class="modal fade bd-example-modal-lg w-100 p-5" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -93,6 +93,11 @@
                 case "date":
                   ?>
                   <input type="date" id="<?php echo $columna->getNombre();?>" name="<?php echo $columna->getNombre();?>" class="form-control-lg text-center mb-3 w-100 inputVioleta">
+                  <?php
+                break;
+                case "double":
+                  ?>
+                  <input type="text" id="<?php echo $columna->getNombre();?>" name="<?php echo $columna->getNombre();?>" value="0.0" class="form-control-lg text-center mb-3 w-100 inputVioleta">
                   <?php
                 break;
                 default:

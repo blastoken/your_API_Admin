@@ -1,5 +1,5 @@
 <?php
-class prova{
+class usuario{
     /**
    * @var int
    */
@@ -7,7 +7,7 @@ class prova{
    /**
    * @var string
    */
-   private $nom;
+   private $nombre;
    /**
    * @var string
    */
@@ -15,19 +15,14 @@ class prova{
    /**
    * @var string
    */
-   private $fecha;
-   /**
-   * @var string
-   */
-   private $yep;
+   private $descripcion;
    
-  public function __construct($id=0,$nom="",$apellidos="",$fecha="",$yep="")
+  public function __construct($id=0,$nombre="",$apellidos="",$descripcion="")
   {
     $this->id = $id;
-    $this->nom = $nom;
+    $this->nombre = $nombre;
     $this->apellidos = $apellidos;
-    $this->fecha = $fecha;
-    $this->yep = $yep;
+    $this->descripcion = $descripcion;
   }
 
   public function getid():int
@@ -35,9 +30,9 @@ class prova{
       return $this->id;
   }
 
-  public function getnom():string
+  public function getnombre():string
   {
-      return $this->nom;
+      return $this->nombre;
   }
 
   public function getapellidos():string
@@ -45,14 +40,9 @@ class prova{
       return $this->apellidos;
   }
 
-  public function getfecha():string
+  public function getdescripcion():string
   {
-      return $this->fecha;
-  }
-
-  public function getyep():string
-  {
-      return $this->yep;
+      return $this->descripcion;
   }
 
   public function setid($id)
@@ -60,9 +50,9 @@ class prova{
       $this->id = $id;
   }
 
-  public function setnom($nom)
+  public function setnombre($nombre)
   {
-      $this->nom = $nom;
+      $this->nombre = $nombre;
   }
 
   public function setapellidos($apellidos)
@@ -70,44 +60,36 @@ class prova{
       $this->apellidos = $apellidos;
   }
 
-  public function setfecha($fecha)
+  public function setdescripcion($descripcion)
   {
-      $this->fecha = $fecha;
-  }
-
-  public function setyep($yep)
-  {
-      $this->yep = $yep;
+      $this->descripcion = $descripcion;
   }
 
   public function toArrayToView():array
   {
     return [
       'id'=>$this->getid(),
-      'nom'=>$this->getnom(),
+      'nombre'=>$this->getnombre(),
       'apellidos'=>$this->getapellidos(),
-      'fecha'=>$this->getfecha(),
-      'yep'=>$this->getyep()
+      'descripcion'=>$this->getdescripcion()
     ];
   }
 
   public function toArray():array
   {
     return [
-      'nom'=>$this->getnom(),
+      'nombre'=>$this->getnombre(),
       'apellidos'=>$this->getapellidos(),
-      'fecha'=>$this->getfecha(),
-      'yep'=>$this->getyep()
+      'descripcion'=>$this->getdescripcion()
     ];
   }
 
   public function setFromArray($array)
   {
     $this->id = $array[id];
-    $this->nom = $array[nom];
+    $this->nombre = $array[nombre];
     $this->apellidos = $array[apellidos];
-    $this->fecha = $array[fecha];
-    $this->yep = $array[yep];
+    $this->descripcion = $array[descripcion];
     }
 
 }

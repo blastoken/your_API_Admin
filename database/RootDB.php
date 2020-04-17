@@ -64,7 +64,7 @@ class RootDB
             CASE DATA_TYPE
             WHEN 'varchar' THEN CHARACTER_MAXIMUM_LENGTH
             WHEN 'int' THEN (NUMERIC_PRECISION+1)
-            WHEN 'double' THEN CONCAT(NUMERIC_PRECISION,\".\",NUMERIC_SCALE)
+            WHEN 'double' THEN CONCAT(NUMERIC_PRECISION,'.',NUMERIC_SCALE)
             ELSE ''
             END as 'length', EXTRA AS 'extra', COLUMN_KEY AS 'indice'
             FROM INFORMATION_SCHEMA.COLUMNS
@@ -84,21 +84,29 @@ class RootDB
             CASE DATA_TYPE
             WHEN 'varchar' THEN CHARACTER_MAXIMUM_LENGTH
             WHEN 'int' THEN (NUMERIC_PRECISION+1)
-            WHEN 'double' THEN CONCAT(NUMERIC_PRECISION,\".\",NUMERIC_SCALE)
+            WHEN 'double' THEN CONCAT(NUMERIC_PRECISION,'.',NUMERIC_SCALE)
             ELSE ''
             END as 'length', EXTRA AS 'extra', COLUMN_KEY AS 'indice'
             FROM INFORMATION_SCHEMA.COLUMNS
-            WHERE TABLE_SCHEMA = :nombbdd; AND TABLE_NAME = :nomTaula";
+            WHERE TABLE_SCHEMA = :nombbdd AND TABLE_NAME = '".$nomTaula."';";
       $pdoStatement=$this->connection->prepare($sql);
       $nombbdd = htmlspecialchars(strip_tags($nombbdd));
       $pdoStatement->bindParam(":nombbdd", $nombbdd);
-      $nombbdd = htmlspecialchars(strip_tags($nomTaula));
-      $pdoStatement->bindParam(":nomTaula", $nomTaula);
 
       if($pdoStatement->execute()===false){
           throw new QueryBuilderException("No se han podido leer las tablas de la Base de Datos...");
       }
       return $pdoStatement->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, "ColumnaTabla");
+    }
+
+    public function deleteTable($nomTaula){
+      $sql="DROP TABLE IF EXISTS ".$nomTaula.";";
+      $pdoStatement=$this->connection->prepare($sql);
+
+      if($pdoStatement->execute()===false){
+          throw new QueryBuilderException("No se ha podido crear el usuario de la Base de Datos...");
+      }
+      return true;
     }
 
   }

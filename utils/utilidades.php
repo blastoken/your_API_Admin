@@ -139,22 +139,34 @@ function getTablasFromColumns($columns){
 
 function comprobarColumnasFormulario($columna,$i){
   $errores = array();
-  if($columna->getTipo() === ""){
-    if($columna->getNombre() === ""){
-      array_push($errores,"Nombre y tipo no definidos en columna ".$i."...");
+    if($columna->getTipo() === ""){
+      if($columna->getNombre() === ""){
+        array_push($errores,"Nombre y tipo no definidos en columna ".$i."...");
+      }else{
+        array_push($errores,"Tipo no definido para la columna ".$columna->getNombre());
+      }
+    }
+    if($columna->getNombre() !== ""){
+      if(strpos($columna->getNombre()," ")){
+        $columna->setNombre(explode($columna->getNombre()," ")[0]);
+      }
     }else{
-      array_push($errores,"Tipo no definido para la columna ".$columna->getNombre());
+      array_push($errores,"Nombre no definido en columna ".$i."...");
     }
-  }
-  if($columna->getNombre() !== ""){
-    if(strpos($columna->getNombre()," ")){
-      $columna->setNombre(explode($columna->getNombre()," ")[0]);
+    if($columna->getLength() == 0 && $columna->getTipo() !== "timestamp" && $columna->getTipo() !== "date"){
+      array_push($errores,"Tamaño no definido en columna ".$i."...");
     }
+
+  return $errores;
+}
+
+function eliminarEntidad($bd,$nomTaula):array{
+  $errores = array();
+  $ruta = "entities/".$bd."/".$nomTaula.".php";
+  if(file_exists($ruta)){
+    unlink($ruta);
   }else{
-    array_push($errores,"Nombre no definido en columna ".$i."...");
-  }
-  if($columna->getLength() == 0 && $columna->getTipo() !== "timestamp" && $columna->getTipo() !== "date"){
-    array_push($errores,"Tamaño no definido en columna ".$i."...");
+    array_push($errores,"No se ha podido eliminar el archivo de la tabla...");
   }
   return $errores;
 }
@@ -317,14 +329,14 @@ function createSetFromArray($columnas):string{
   $inside = "";
   $content = "";
   $content .= "
-  public function setFromArray($"."array):
+  public function setFromArray($"."array)
   {
     ";
     foreach ($columnas as $columna) {
-      $content .= "$"."this->".$columna->getNombre().";
+      $content .= "$"."this->".$columna->getNombre()." = $"."array[".$columna->getNombre()."];
     ";
     }
-  "}
+$content.="}
 ";
   return $content;
 }
@@ -337,5 +349,20 @@ function getIdsName($columnas):string
     }
   }
   return "id";
+}
+
+function getAlteracionesUpdateTable($columnas, $columnasUpdate, $tabla):array{
+  $cambios = array();
+  foreach ($columnasUpdate as $num => $columnaUpdate) {
+    if(isset($columnas[$num])){
+      if($columnas[$num]->getTipo() !== $columnaUpdate->getTipo() || $columnas[$num]->getLength() !== $columnaUpdate->getLength() || ($columnas[$num]->getExtra() !== $columnaUpdate->getExtra() && $columnas[$num]->getExtra() === "")){
+        //ALTER TABLE table_name MODIFY COLUMN column_name column_type(column_length)
+        array_push($cambios, "ALTER TABLE ".$tabla." MODIFY COLUMN ".$columnaUpdate->toColumnString().";");
+      }
+    }else{
+      array_push($cambios,"ALTER TABLE ".$tabla." ADD ".$columnaUpdate->toColumnString().";");
+    }
+  }
+  return $cambios;
 }
 ?>
