@@ -137,6 +137,23 @@ function getTablasFromColumns($columns){
   return $tablas;
 }
 
+function getTableIndexes($indexes){
+  $tablasNames = array();
+  foreach ($indexes as $index) {
+    if(!in_array($index->getTabla(), $tablasNames)){
+      array_push($tablasNames, $index->getTabla());
+    }
+  }
+  $tablas = array();
+  foreach($tablasNames as $name){
+    $tablas[$name] = array();
+  }
+  foreach ($indexes as $index) {
+    array_push($tablas[$index->getTabla()], $index);
+  }
+  return $tablas;
+}
+
 function comprobarColumnasFormulario($columna,$i){
   $errores = array();
     if($columna->getTipo() === ""){
@@ -365,4 +382,14 @@ function getAlteracionesUpdateTable($columnas, $columnasUpdate, $tabla):array{
   }
   return $cambios;
 }
+
+function getColumnaByName($campo, $columnas){
+  foreach ($columnas as $num => $columna) {
+    if($columna->getNombre() === $campo){
+      return $columna;
+    }
+  }
+  return new ColumnaTabla();
+}
+
 ?>

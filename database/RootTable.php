@@ -37,4 +37,24 @@ class RootTable
       return true;
     }
 
+    public function eliminarColumna($tabla, $columna){
+      $sql="ALTER TABLE ".$tabla." DROP IF EXISTS ".$columna;
+      $pdoStatement=$this->connection->prepare($sql);
+
+      if($pdoStatement->execute()===false){
+          throw new QueryBuilderException("No se ha podido crear la tabla de la Base de Datos...");
+      }
+      return true;
+    }
+
+    public function eliminarIndices($tabla, $nombreIndice){
+      $sql="ALTER TABLE `".$tabla."` DROP FOREIGN KEY `".$nombreIndice."`";
+      $pdoStatement=$this->connection->prepare($sql);
+
+      if($pdoStatement->execute()===false){
+          throw new QueryBuilderException("No se ha podido crear la tabla de la Base de Datos...");
+      }
+      return true;
+    }
+
   }

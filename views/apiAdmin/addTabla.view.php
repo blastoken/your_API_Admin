@@ -4,13 +4,14 @@
     <form id="formularioAddTabla" method="post" class="m-2">
         <input type="text" id="nomTaula" name="nomTaula" value="<?php echo $nomTaula; ?>" class="form-control-lg text-center mb-3 w-100 inputVioleta" placeholder="Nombre de la Tabla">
         <div id="contenedorAdds" class="row justify-content-center align-items-center w-100 pl-4">
-        <p class="col-3 txtVioletaP font-weight-bold">Nombre</p>
-        <p class="col-2 txtVioletaP font-weight-bold">Tamaño</p>
-        <p class="col-3 txtVioletaP font-weight-bold">Tipo</p>
-        <p class="col-2 txtVioletaP font-weight-bold">Índice</p>
-        <p class="col-2 txtVioletaP font-weight-bold">Extra</p>
         <?php if(!isset($_GET['tabla'])){
           ?>
+        <p class="col-3 txtVioletaP font-weight-bold text-center">Nombre</p>
+        <p class="col-2 txtVioletaP font-weight-bold text-center">Tamaño</p>
+        <p class="col-3 txtVioletaP font-weight-bold text-center">Tipo</p>
+        <p class="col-2 txtVioletaP font-weight-bold">Índice</p>
+        <p class="col-2 txtVioletaP font-weight-bold">Extra</p>
+
         <input type="hidden" id="count" name="count" value="2">
         <input type="text" id="campo0Nombre" name="campo0Nombre" value="" class="col-3 form-control-lg text-center mb-3 w-100 inputVioleta">
         <input title="El tamaño máximo de este tipo es de 11 bytes" type="number" id="campo0Length" name="campo0Length" min="1" max="11" value="11" class="col-2 form-control-lg text-center mb-3 w-100 inputVioleta">
@@ -75,14 +76,21 @@
 
       <?php }else{
         ?>
+        <p class="col-1"></p>
+        <p class="col-3 txtVioletaP font-weight-bold text-center">Nombre</p>
+        <p class="col-2 txtVioletaP font-weight-bold text-center">Tamaño</p>
+        <p class="col-2 txtVioletaP font-weight-bold text-center">Tipo</p>
+        <p class="col-2 txtVioletaP font-weight-bold">Índice</p>
+        <p class="col-2 txtVioletaP font-weight-bold">Extra</p>
 
+        <div class="col-1 pb-3"></div>
         <input type="hidden" id="count" name="count" value="<?php echo sizeof($columnas)-1;?>">
         <input type="text" id="campo0Nombre" name="campo0Nombre" value="<?php echo $columnas[0]->getNombre(); ?>" class="col-3 form-control-lg text-center mb-3 w-100 inputVioleta">
 
         <?php if($columnas[0]->getTipo() === "int"){
           ?>
           <input title="El tamaño máximo de este tipo es de 11 bytes" type="number" id="campo0Length" name="campo0Length" min="1" max="11" value="<?php echo $columnas[0]->getLength(); ?>" class="col-2 form-control-lg text-center mb-3 w-100 inputVioleta">
-          <select id="campo0Tipo" name="campo0Tipo" class="col-3 form-control-lg text-center mb-3 w-100 inputVioleta sinFlecha" onchange="onChangeTipoToLength(0)">
+          <select id="campo0Tipo" name="campo0Tipo" class="col-2 form-control-lg text-center mb-3 w-100 inputVioleta sinFlecha" onchange="onChangeTipoToLength(0)">
             <option value=""></option>
             <option value="int" selected="true">int</option>
             <option value="varchar">varchar</option>
@@ -124,7 +132,7 @@
         for ($i=1; $i < sizeof($columnas); $i++) {
 
           ?>
-
+          <div class="col-1 pb-3"><a href="addTabla.php?tabla=<?php echo $nomTaula; ?>&deleteColumn=<?php echo $columnas[$i]->getNombre(); ?>" class="btn btn-danger text-white mr-2"><i class="fa fa-close"></i></a></div>
           <input type="text" id="campo<?php echo $i; ?>Nombre" name="campo<?php echo $i; ?>Nombre" value="<?php echo $columnas[$i]->getNombre(); ?>" class="col-3 form-control-lg text-center mb-3 w-100 inputVioleta">
 
           <?php
@@ -132,7 +140,7 @@
             case "int":
             ?>
             <input title="El tamaño máximo de este tipo es de 11 bytes" type="number" id="campo<?php echo $i; ?>Length" name="campo<?php echo $i; ?>Length" min="1" max="11" value="<?php echo $columnas[$i]->getLength(); ?>" class="col-2 form-control-lg text-center mb-3 w-100 inputVioleta">
-            <select id="campo<?php echo $i; ?>Tipo" name="campo<?php echo $i; ?>Tipo" class="col-3 form-control-lg text-center mb-3 w-100 inputVioleta sinFlecha" onchange="onChangeTipoToLength(<?php echo $i; ?>)">
+            <select id="campo<?php echo $i; ?>Tipo" name="campo<?php echo $i; ?>Tipo" class="col-2 form-control-lg text-center mb-3 w-100 inputVioleta sinFlecha" onchange="onChangeTipoToLength(<?php echo $i; ?>)">
               <option value=""></option>
               <option value="int" selected="true">int</option>
               <option value="varchar">varchar</option>
@@ -147,7 +155,7 @@
           case "varchar":
             ?>
             <input title="El tamaño máximo de este tipo es de 255 bytes" type="number" id="campo<?php echo $i; ?>Length" name="campo<?php echo $i; ?>Length" min="1" max="255" value="<?php echo $columnas[$i]->getLength(); ?>" class="col-2 form-control-lg text-center mb-3 w-100 inputVioleta">
-            <select id="campo<?php echo $i; ?>Tipo" name="campo<?php echo $i; ?>Tipo" class="col-3 form-control-lg text-center mb-3 w-100 inputVioleta sinFlecha" onchange="onChangeTipoToLength(<?php echo $i; ?>)">
+            <select id="campo<?php echo $i; ?>Tipo" name="campo<?php echo $i; ?>Tipo" class="col-2 form-control-lg text-center mb-3 w-100 inputVioleta sinFlecha" onchange="onChangeTipoToLength(<?php echo $i; ?>)">
               <option value=""></option>
               <option value="int">int</option>
               <option value="varchar" selected="true">varchar</option>
@@ -162,7 +170,7 @@
             case "text":
             ?>
             <input title="El tamaño máximo de este tipo es de 65535 bytes" type="number" id="campo<?php echo $i; ?>Length" name="campo<?php echo $i; ?>Length" min="1" max="255" value="<?php echo $columnas[$i]->getLength(); ?>" class="col-2 form-control-lg text-center mb-3 w-100 inputVioleta">
-            <select id="campo<?php echo $i; ?>Tipo" name="campo<?php echo $i; ?>Tipo" class="col-3 form-control-lg text-center mb-3 w-100 inputVioleta sinFlecha" onchange="onChangeTipoToLength(<?php echo $i; ?>)">
+            <select id="campo<?php echo $i; ?>Tipo" name="campo<?php echo $i; ?>Tipo" class="col-2 form-control-lg text-center mb-3 w-100 inputVioleta sinFlecha" onchange="onChangeTipoToLength(<?php echo $i; ?>)">
               <option value=""></option>
               <option value="int">int</option>
               <option value="varchar">varchar</option>
@@ -177,7 +185,7 @@
             case "timestamp":
             ?>
             <input title="Este campo recoge la fecha y hora, no necesita especificar un tamaño" type="number" id="campo<?php echo $i; ?>Length" name="campo<?php echo $i; ?>Length" min="0" max="0" value="0" class="col-2 form-control-lg text-center mb-3 w-100 inputVioleta" disabled>
-            <select id="campo<?php echo $i; ?>Tipo" name="campo<?php echo $i; ?>Tipo" class="col-3 form-control-lg text-center mb-3 w-100 inputVioleta sinFlecha" onchange="onChangeTipoToLength(<?php echo $i; ?>)">
+            <select id="campo<?php echo $i; ?>Tipo" name="campo<?php echo $i; ?>Tipo" class="col-2 form-control-lg text-center mb-3 w-100 inputVioleta sinFlecha" onchange="onChangeTipoToLength(<?php echo $i; ?>)">
               <option value=""></option>
               <option value="int">int</option>
               <option value="varchar">varchar</option>
@@ -192,7 +200,7 @@
             case "tinyint":
             ?>
             <input title="El tamaño máximo de este tipo es de 1 byte" type="number" id="campo<?php echo $i; ?>Length" name="campo<?php echo $i; ?>Length" min="1" max="1" value="1" class="col-2 form-control-lg text-center mb-3 w-100 inputVioleta">
-            <select id="campo<?php echo $i; ?>Tipo" name="campo<?php echo $i; ?>Tipo" class="col-3 form-control-lg text-center mb-3 w-100 inputVioleta sinFlecha" onchange="onChangeTipoToLength(<?php echo $i; ?>)">
+            <select id="campo<?php echo $i; ?>Tipo" name="campo<?php echo $i; ?>Tipo" class="col-2 form-control-lg text-center mb-3 w-100 inputVioleta sinFlecha" onchange="onChangeTipoToLength(<?php echo $i; ?>)">
               <option value=""></option>
               <option value="int">int</option>
               <option value="varchar">varchar</option>
@@ -207,7 +215,7 @@
             case "double":
             ?>
             <input title="Se utiliza el siguiente formato -> cifras_entero.cifras_decimales    (MAX decimales = 9)" type="text" id="campo<?php echo $i; ?>Length" name="campo<?php echo $i; ?>Length" min="0" max="10" value="<?php echo $columnas[$i]->getLength(); ?>" class="col-2 form-control-lg text-center mb-3 w-100 inputVioleta">
-            <select id="campo<?php echo $i; ?>Tipo" name="campo<?php echo $i; ?>Tipo" class="col-3 form-control-lg text-center mb-3 w-100 inputVioleta sinFlecha" onchange="onChangeTipoToLength(<?php echo $i; ?>)">
+            <select id="campo<?php echo $i; ?>Tipo" name="campo<?php echo $i; ?>Tipo" class="col-2 form-control-lg text-center mb-3 w-100 inputVioleta sinFlecha" onchange="onChangeTipoToLength(<?php echo $i; ?>)">
               <option value=""></option>
               <option value="int">int</option>
               <option value="varchar">varchar</option>
@@ -222,7 +230,7 @@
             case "date":
             ?>
             <input title="Este campo recoge la fecha, no necesita especificar un tamaño" type="number" id="campo<?php echo $i; ?>Length" name="campo<?php echo $i; ?>Length" min="0" max="0" value="0" class="col-2 form-control-lg text-center mb-3 w-100 inputVioleta" disabled>
-            <select id="campo<?php echo $i; ?>Tipo" name="campo<?php echo $i; ?>Tipo" class="col-3 form-control-lg text-center mb-3 w-100 inputVioleta sinFlecha" onchange="onChangeTipoToLength(<?php echo $i; ?>)">
+            <select id="campo<?php echo $i; ?>Tipo" name="campo<?php echo $i; ?>Tipo" class="col-2 form-control-lg text-center mb-3 w-100 inputVioleta sinFlecha" onchange="onChangeTipoToLength(<?php echo $i; ?>)">
               <option value=""></option>
               <option value="int">int</option>
               <option value="varchar">varchar</option>
@@ -283,7 +291,7 @@
         }
         count++;
         var container = document.getElementById("contenedorAdds");
-        container.innerHTML += "<input type='text' id='campo"+count+"Nombre' name='campo"+count+"Nombre' class='col-3 form-control-lg text-center mb-3 w-100 inputVioleta'><input type='number' id='campo"+count+"Length' name='campo"+count+"Length' min='1' max='1' value='1' class='col-2 form-control-lg text-center mb-3 w-100 inputVioleta'><select id='campo"+count+"Tipo' name='campo"+count+"Tipo' class='col-3 form-control-lg text-center mb-3 w-100 inputVioleta sinFlecha' onchange='onChangeTipoToLength("+count+")'><option value=''></option><option value='int'>int</option><option value='varchar'>varchar</option><option value='text'>text</option><option value='timestamp'>timestamp</option><option value='tinyint'>tinyint</option><option value='double'>double</option><option value='date'>date</option></select><p class='col-2'></p><p class='col-2'><input name='campo"+count+"NON' type='checkbox' id='campo"+count+"NON' value='NOT_NULL'><label for='campo"+count+"NON' class='form-control-lg w-100 txtVioletaP'> NOT_NULL</label></p>";
+        container.innerHTML += "<?php if(isset($_GET['tabla'])){ echo "<div class='col-1 pb-3'></div>"; } ?><input type='text' id='campo"+count+"Nombre' name='campo"+count+"Nombre' class='col-3 form-control-lg text-center mb-3 w-100 inputVioleta'><input type='number' id='campo"+count+"Length' name='campo"+count+"Length' min='1' max='1' value='1' class='col-2 form-control-lg text-center mb-3 w-100 inputVioleta'><select id='campo"+count+"Tipo' name='campo"+count+"Tipo' class='col-<?php if(isset($_GET['tabla'])){ echo "2"; }else{ echo "3"; } ?> form-control-lg text-center mb-3 w-100 inputVioleta sinFlecha' onchange='onChangeTipoToLength("+count+")'><option value=''></option><option value='int'>int</option><option value='varchar'>varchar</option><option value='text'>text</option><option value='timestamp'>timestamp</option><option value='tinyint'>tinyint</option><option value='double'>double</option><option value='date'>date</option></select><p class='col-2'></p><p class='col-2'><input name='campo"+count+"NON' type='checkbox' id='campo"+count+"NON' value='NOT_NULL'><label for='campo"+count+"NON' class='form-control-lg w-100 txtVioletaP'> NOT_NULL</label></p>";
         document.getElementById("count").value = count;
       }
 

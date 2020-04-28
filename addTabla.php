@@ -4,6 +4,7 @@ session_start();
 require 'database/Connection.php';
 require 'database/RootTable.php';
 require 'entities/ColumnaTabla.php';
+require 'entities/Index.php';
 require 'utils/utilidades.php';
 if(!isset($_SESSION['usuarioLogueado'])){
   header("Location: login.php");
@@ -83,6 +84,8 @@ if(isset($_GET['tabla'])){
     $connectionLocal = Connection::make($configLocal['database']);
     $rootDB = new RootDB($connectionLocal);
     $columnas = $rootDB->getAllColumnsFromTable($_SESSION['bdActiva'], $nomTaula);
+    $indexes = $rootDB->getAllIndexesFromTable($_SESSION['bdActiva'], $nomTaula);
+    var_dump($indexes);
   }catch(QueryBuilderException $queryBuilderException){
       array_push($_SESSION['errores'],array($queryBuilderException->getMessage()));
   }catch(PDOException $pdoException){
@@ -133,6 +136,32 @@ if(isset($_GET['tabla'])){
       die();
     }
 }
+
+if(isset($_GET['deleteColumn'])){
+  $columnToDelete = $_GET['deleteColumn'];
+  try{
+    if($rootTable->eliminarColumna($nomTaula, $columnToDelete)){
+      $inDelete = 0;
+      foreach ($columnas as $indice => $columna) {
+        if($columna->getNombre() === $columnToDelete){
+          $inDelete = $indice;
+        }
+      }
+      unset($columnas[$indice]);
+      crearEntidad($_SESSION['bdActiva'], $nomTaula, $columnas);
+      if(isset($_SESSION['errores'])){
+        unset($_SESSION['errores']);
+      }
+    }
+  }catch(QueryBuilderException $queryBuilderException){
+      array_push($_SESSION['errores'],array($queryBuilderException->getMessage()));
+  }catch(PDOException $pdoException){
+      array_push($_SESSION['errores'],array($pdoException->getMessage()));
+  }
+  header("Location: addTabla.php?tabla=".$nomTaula);
+  die();
+}
+
 if(sizeof($_SESSION['errores']) > 0){
   $_SESSION['errores'] = unificarArrays($_SESSION['errores']);
 }else{

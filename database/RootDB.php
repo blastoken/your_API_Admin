@@ -68,10 +68,14 @@ class RootDB
             ELSE ''
             END as 'length', EXTRA AS 'extra', COLUMN_KEY AS 'indice'
             FROM INFORMATION_SCHEMA.COLUMNS
-            WHERE TABLE_SCHEMA = :nombbdd;";
+            WHERE TABLE_SCHEMA = :nombbdd AND TABLE_NAME NOT IN (
+              SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='VIEW' AND TABLE_SCHEMA = :nombbdd2
+            );";
       $pdoStatement=$this->connection->prepare($sql);
       $nombbdd = htmlspecialchars(strip_tags($nombbdd));
+      $nombbdd2 = $nombbdd;
       $pdoStatement->bindParam(":nombbdd", $nombbdd);
+      $pdoStatement->bindParam(":nombbdd2", $nombbdd2);
 
       if($pdoStatement->execute()===false){
           throw new QueryBuilderException("No se han podido leer las tablas de la Base de Datos...");
@@ -108,5 +112,50 @@ class RootDB
       }
       return true;
     }
+
+    public function getAllIndexesFromDB($nombbdd){
+      $sql="SELECT DISTINCT
+              TABLE_NAME AS 'tabla',
+              COLUMN_NAME AS 'columna',
+              CONSTRAINT_NAME AS 'nombre',
+              REFERENCED_TABLE_NAME AS 'tablaRef',
+              REFERENCED_COLUMN_NAME AS 'columnaRef'
+            FROM
+                INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+            WHERE
+            	REFERENCED_TABLE_SCHEMA = :nombbdd;";
+      $pdoStatement=$this->connection->prepare($sql);
+      $nombbdd = htmlspecialchars(strip_tags($nombbdd));
+      $pdoStatement->bindParam(":nombbdd", $nombbdd);
+
+      if($pdoStatement->execute()===false){
+          throw new QueryBuilderException("No se han podido leer los índices de la Base de Datos...");
+      }
+      return $pdoStatement->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, "Index");
+    }
+
+    public function getAllIndexesFromTable($nombbdd, $nomTaula){
+      $sql="SELECT
+              TABLE_NAME AS 'tabla',
+              COLUMN_NAME AS 'columna',
+              CONSTRAINT_NAME AS 'nombre',
+              REFERENCED_TABLE_NAME AS 'tablaRef',
+              REFERENCED_COLUMN_NAME AS 'columnaRef'
+            FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+            WHERE REFERENCED_TABLE_SCHEMA = :nombbdd AND TABLE_NAME = :nomTaula;";
+      $pdoStatement=$this->connection->prepare($sql);
+      $nombbdd = htmlspecialchars(strip_tags($nombbdd));
+      $nombbdd = htmlspecialchars(strip_tags($nomTaula));
+      $pdoStatement->bindParam(":nombbdd", $nombbdd);
+      $pdoStatement->bindParam(":nomTaula", $nomTaula);
+
+      if($pdoStatement->execute()===false){
+          throw new QueryBuilderException("No se han podido leer los índices de la Tabla ".$nomTaula."...");
+      }
+      //var_dump($pdoStatement);
+      return $pdoStatement->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, "Index");
+    }
+
+    //SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='VIEW' AND TABLE_SCHEMA <> 'mysql';
 
   }
