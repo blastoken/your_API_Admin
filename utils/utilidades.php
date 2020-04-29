@@ -392,4 +392,47 @@ function getColumnaByName($campo, $columnas){
   return new ColumnaTabla();
 }
 
+function getColumnsToCreateView($tabla, $indexes){
+
+}
+
+function getTablesRelatedFromThis($indexes){
+  $tables = array();
+
+  foreach ($indexes as $index) {
+    if(!in_array($index->getTablaRef(), $tables)){
+      array_push($tables, $index->getTablaRef());
+    }
+  }
+
+  return $tables;
+}
+
+function getTablesRelatedToThis($indexesAll, $tabla){
+  $tables = array();
+
+  foreach ($indexesAll as $key => $indexes) {
+    if($key !== $tabla){
+      foreach ($indexes as $index) {
+        if($index->getTablaRef() === $tabla){
+          if(!in_array($index->getTabla(), $tables)){
+            array_push($tables, $index->getTabla());
+          }
+        }
+      }
+    }
+  }
+
+  return $tables;
+}
+
+function unirTablasRelacionadas($tablasI, $tablasE){
+  $tablasRelacionadas = $tablasI;
+  foreach ($tablasE as $tabla) {
+    if(!in_array($tabla,$tablasRelacionadas)){
+      array_push($tablasRelacionadas, $tabla);
+    }
+  }
+  return $tablasRelacionadas;
+}
 ?>

@@ -34,7 +34,7 @@
               <ul class="dropdown-menu fondoVioleta0" role="menu">
                 <li><a href="tablasbdyaa.php?bd=<?php echo $_SESSION['bdActiva']."&"."edit=".$nombre; ?>" class="pl-1 h-100 w-100" onmouseover="cambioImagen('<?php echo "imgEditar".$nombre;  ?>','imgs/editar_on_over.png')" onmouseout="cambioImagen('<?php echo "imgEditar".$nombre;  ?>','imgs/editar.png')"><img id="<?php echo "imgEditar".$nombre;  ?>" src="imgs/editar.png" alt="edit" height="24px"> Editar</a></li>
                 <li><a href="tablasbdyaa.php?bd=<?php echo $_SESSION['bdActiva']."&"."delete=".$nombre; ?>" class="pl-1 h-100" onmouseover="cambioImagen('<?php echo "imgEliminar".$nombre;  ?>','imgs/eliminar_on_over.png')" onmouseout="cambioImagen('<?php echo "imgEliminar".$nombre;  ?>','imgs/eliminar.png')"><img id="<?php echo "imgEliminar".$nombre;  ?>" src="imgs/eliminar.png" alt="delete" height="24px"> Eliminar</a></li>
-                <li><a href="createViewyaa.php?tabla=<?php echo $nombre; ?>" class="pl-1 h-100" onmouseover="cambioImagen('<?php echo "imgVistaTabla".$nombre;  ?>','imgs/vista_tabla_on_over.png')" onmouseout="cambioImagen('<?php echo "imgVistaTabla".$nombre;  ?>','imgs/vista_tabla.png')"><img id="<?php echo "imgVistaTabla".$nombre;  ?>" src="imgs/vista_tabla.png" alt="delete" height="24px"> Editor de Vistas</a></li>
+                <li><a href="createViewyaa.php?tabla=<?php echo $nombre; ?>" class="pl-1 h-100" onmouseover="cambioImagen('<?php echo "imgVistaTabla".$nombre;  ?>','imgs/vista_tabla_on_over.png')" onmouseout="cambioImagen('<?php echo "imgVistaTabla".$nombre;  ?>','imgs/vista_tabla.png')"><img id="<?php echo "imgVistaTabla".$nombre;  ?>" src="imgs/vista_tabla.png" alt="delete" height="24px"> Creador de Vistas</a></li>
               </ul>
             </div>
           </th>
@@ -168,7 +168,6 @@
           opcion.appendChild( document.createTextNode(campo) );
           opcion.value = campo;
           rowsSpinner.appendChild(opcion);
-          console.log(campo);
         }
       }
     }

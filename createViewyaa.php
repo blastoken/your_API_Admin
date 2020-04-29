@@ -20,9 +20,20 @@ if(isset($_GET['tabla'])){
     $tablas = getTablasFromColumns($columns);
     $indexes = $rootDB->getAllIndexesFromDB($_SESSION['bdActiva']);
     $indexes = getTableIndexes($indexes);
+    $indexesThis = $indexes[$tabla];
+    $tablasRelacionadasInternas = getTablesRelatedFromThis($indexes[$tabla]);
+    $tablasRelacionadasExternas = getTablesRelatedToThis($indexes, $tabla);
+    $tablasRelacionadas = unirTablasRelacionadas($tablasRelacionadasInternas, $tablasRelacionadasExternas);
+
 
   }catch(QueryBuilderException $queryBuilderException){
       array_push($_SESSION['errores'],array($queryBuilderException->getMessage()));
+  }
+  if(isset($_POST['crearVista'])){
+    array_pop($_POST);
+    var_dump($_POST);
+    //Ací mos quedem hui..(fck) hi ha que sopar
+
   }
 }else{
   header("Location: tablasbdyaa.php?bd=".$_SESSION['bdActiva']);
@@ -32,5 +43,6 @@ if(isset($_GET['tabla'])){
 
 include_once("views/partials/header.view.php");
 include_once("views/partials/controlPanel.view.php");
+include_once("views/apiAdmin/createViewyaa.view.php");
 
 ?>
