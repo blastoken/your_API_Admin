@@ -350,7 +350,7 @@ function createSetFromArray($columnas):string{
   {
     ";
     foreach ($columnas as $columna) {
-      $content .= "$"."this->".$columna->getNombre()." = $"."array[".$columna->getNombre()."];
+      $content .= "$"."this->".$columna->getNombre()." = $"."array['".$columna->getNombre()."'];
     ";
     }
 $content.="}
@@ -435,4 +435,49 @@ function unirTablasRelacionadas($tablasI, $tablasE){
   }
   return $tablasRelacionadas;
 }
+
+function getCamposVista($campos, $num){
+  $camposVista = [];
+
+  for ($i=0; $i < $num; $i++) {
+    $campo = new CampoVista($campos['tabla'.$i], $campos['campo'.$i], $campos['renombre'.$i]);
+    array_push($camposVista, $campo);
+  }
+
+  return $camposVista;
+}
+
+function getSentenciaCreateView($nombre, $campos, $indexes):string
+{
+  $sql = "CREATE VIEW ".$nombre." AS SELECT";
+  foreach ($campos as $campo) {
+    $sql .= " ".$campo->getTabla().".".$campo->getCampo()." AS '".$campo->getAlias()."',";
+  }
+  $sql = substr($sql, 0, strlen($sql)-1);
+  $sql .= " FROM ";
+  $tablas = [];
+  array_push($tablas, $campos[0]->getTabla());
+  foreach ($campos as $campo) {
+    if(!in_array($campo->getTabla(),$tablas)){
+      array_push($tablas, $campo->getTabla());
+    }
+  }
+
+  foreach ($tablas as $tabla) {
+    $sql .= " ".$tabla.",";
+  }
+  $sql = substr($sql, 0, strlen($sql)-1);
+  if(sizeof($tablas) > 1){
+    $sql .= " WHERE ";
+    foreach ($indexes as $index) {
+      if(in_array($index->getTabla(), $tablas) && in_array($index->getTablaRef(),$tablas)){
+        $sql .= "".$index->getTabla().".".$index->getColumna()." = ".$index->getTablaRef().".".$index->getColumnaRef()." AND ";
+      }
+    }
+    $sql = substr($sql, 0, strlen($sql)-5).";";
+  }
+
+  return $sql;
+}
+
 ?>

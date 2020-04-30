@@ -152,10 +152,26 @@ class RootDB
       if($pdoStatement->execute()===false){
           throw new QueryBuilderException("No se han podido leer los índices de la Tabla ".$nomTaula."...");
       }
-      //var_dump($pdoStatement);
       return $pdoStatement->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, "Index");
     }
 
-    //SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='VIEW' AND TABLE_SCHEMA <> 'mysql';
+    /**
+     * @return array
+     * @throws QueryBuilderException
+     */
+    public function findViewByBBDDAndTable($bbdd, $tabla):array{
+        $sql="SELECT * FROM vistas WHERE bbdd = :bbdd AND tabla = :tabla";
+        $pdoStatement=$this->connection->prepare($sql);
+        $nombbdd = htmlspecialchars(strip_tags($bbdd));
+        $pdoStatement->bindParam(":bbdd", $bbdd);
+        $nombbdd = htmlspecialchars(strip_tags($tabla));
+        $pdoStatement->bindParam(":tabla", $tabla);
+        if($pdoStatement->execute()===false){
+            throw new QueryBuilderException("No se ha podido ejecutar la Query");
+        }
+        return $pdoStatement->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE,
+            'Vista');
+
+    }
 
   }

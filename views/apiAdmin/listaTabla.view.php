@@ -1,7 +1,18 @@
 <div class="content-container fondoVioleta0">
 
   <div class="container-fluid">
-
+    <?php if (sizeof($vistasTabla) > 0) {
+      ?>
+      <h4 class="txtVioletaP font-weight-bold col-2">Selecciona una vista</h4>
+      <select id="vista" class="col-2 form-control-lg text-center inputVioleta sinFlecha" onchange="cambioVista()">
+        <option value=""></option>
+        <?php foreach ($vistasTabla as $vistaTabla): ?>
+        <option value="<?php echo $vistaTabla->getNombre(); ?>"<?php if(isset($_GET['vista'])){ if($_GET['vista'] === $vistaTabla->getNombre()){ echo " selected"; } }?>><?php echo $vistaTabla->getNombre(); ?></option>
+        <?php endforeach; ?>
+      </select>
+      <?php
+    }
+    ?>
     <h1 class="text-center txtVioletaOscur font-weight-bold"><?php echo $tabla; ?></h1>
 
     <table id="tabla<?php echo $tabla; ?>" class="table table-reflow tablaVioleta font-weight-bold">
@@ -116,6 +127,12 @@
       </div>
     </div>
   </div>
+
+  <script>
+    function cambioVista(){
+      //Obtener el valor del select id="vista" i redirigir a la pagina actual cambiando la variable vista con el valor seleccionado
+    }
+  </script>
 
   </div>
 </div>

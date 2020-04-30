@@ -4,6 +4,7 @@ require 'database/Connection.php';
 require 'database/QueryBuilder.php';
 require 'database/RootDB.php';
 require 'entities/ColumnaTabla.php';
+require 'entities/Vista.php';
 require 'utils/utilidades.php';
 
 if(!isset($_SESSION['usuarioLogueado'])){
@@ -21,6 +22,8 @@ if(isset($_GET['tabla'])){
   $connection = Connection::make($config['database']);
   $queryBuilder = new QueryBuilder($connection,$tabla,$tabla);
   try {
+    $vistasTabla = $rootDB->findViewByBBDDAndTable($_SESSION['bdActiva'],$tabla);
+    var_dump($vistasTabla);
     //Insertar nuevos campos
     if(isset($_POST['insertar'])){
       array_pop($_POST);
@@ -53,6 +56,13 @@ if(isset($_GET['tabla'])){
       $queryBuilder->delete($id,$_GET['id']);
       header("Location: listaTabla.php?tabla=".$tabla);
       die();
+    }
+
+    if(isset($_GET['vista'])){
+      $vista = $_GET['vista'];
+      //Falta la creació de l'entitat de la vista
+      //Després s'obté l'entitat i els resultats de la seua execució (array del select efectuat)
+      //Una volta tenim totes les dades falta carregar una taula de la vista amb els resultats
     }
 
   }catch(QueryBuilderException $queryBuilderException){
