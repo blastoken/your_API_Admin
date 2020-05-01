@@ -63,7 +63,7 @@ if(isset($_POST['crearTabla'])){
     if(sizeof($_SESSION['errores']) > 0){
       $_SESSION['errores'] = unificarArrays($_SESSION['errores']);
     }else{
-      crearEntidad($_SESSION['bdActiva'],$nomTaula, $columnas);
+      crearEntidad("entities/".$_SESSION['bdActiva'],$nomTaula, $columnas);
       unset($_SESSION['errores']);
       header("Location: tablasbdyaa.php?bd=".$_SESSION['bdActiva']);
       die();
@@ -123,7 +123,7 @@ if(isset($_GET['tabla'])){
       if(sizeof($alteraciones) > 0){
         $rootTable->lanzarSentencias($alteraciones);
         //Sobreescriu l'entitat modificada
-        crearEntidad($_SESSION['bdActiva'], $nomTaula, $columnasUpdate);
+        crearEntidad("entities/".$_SESSION['bdActiva'], $nomTaula, $columnasUpdate);
       }
     }catch(QueryBuilderException $queryBuilderException){
         array_push($_SESSION['errores'],array($queryBuilderException->getMessage()));
@@ -148,7 +148,7 @@ if(isset($_GET['deleteColumn'])){
         }
       }
       unset($columnas[$indice]);
-      crearEntidad($_SESSION['bdActiva'], $nomTaula, $columnas);
+      crearEntidad("entities/".$_SESSION['bdActiva'], $nomTaula, $columnas);
       if(isset($_SESSION['errores'])){
         unset($_SESSION['errores']);
       }

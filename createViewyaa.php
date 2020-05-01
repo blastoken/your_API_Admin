@@ -52,6 +52,9 @@ if(isset($_GET['tabla'])){
         $queryBuilder = new QueryBuilder($connectionLocal,'vistas','Vista');
         $vista = new Vista(0,$_SESSION['bdActiva'],$nombreVista,$tabla);
         $queryBuilder->save($vista);
+        $columnasVista = getSelectedColumnasView($camposVista, $tablas);
+        var_dump($columnasVista);
+        crearEntidad("entities/".$_SESSION['bdActiva']."/".$tabla, $nombreVista, $columnasVista);
       }catch(QueryBuilderException $queryBuilderException){
           array_push($_SESSION['errores'],array($queryBuilderException->getMessage()));
       }catch(PDOException $pdoException){

@@ -188,8 +188,7 @@ function eliminarEntidad($bd,$nomTaula):array{
   return $errores;
 }
 
-function crearEntidad($bd, $nomTaula, $columnas){
-  $ruta = "entities/".$bd;
+function crearEntidad($ruta, $nomTaula, $columnas){
   if(!file_exists($ruta)){
     mkdir($ruta);
   }
@@ -478,6 +477,19 @@ function getSentenciaCreateView($nombre, $campos, $indexes):string
   }
 
   return $sql;
+}
+
+function getSelectedColumnasView($columnasVista, $tablas){
+  $camposVista = [];
+  foreach ($columnasVista as $columnaVista) {
+    foreach ($tablas[$columnaVista->getTabla()] as $columna) {
+      if($columna->getNombre() === $columnaVista->getCampo()){
+        $columna->setNombre($columnaVista->getAlias());
+        array_push($camposVista,$columna);
+      }
+    }
+  }
+  return $camposVista;
 }
 
 ?>

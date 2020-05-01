@@ -69,3 +69,15 @@ function getValuesToModal(tabla, num){
   formulario.lastElementChild.name = "update";
   console.log(num);
 }
+
+function resetValuesModal(){
+  var formulario = document.getElementById("formularioModal");
+
+  for (var i = 0; i < formulario.elements.length-1; i++) {
+    formulario[i].value = "";
+  }
+  formulario.lastElementChild.value = "Insertar";
+  formulario.lastElementChild.id = "insertar";
+  formulario.lastElementChild.name = "insertar";
+
+}

@@ -6,13 +6,65 @@
       <h4 class="txtVioletaP font-weight-bold col-2">Selecciona una vista</h4>
       <select id="vista" class="col-2 form-control-lg text-center inputVioleta sinFlecha" onchange="cambioVista()">
         <option value=""></option>
-        <?php foreach ($vistasTabla as $vistaTabla): ?>
+        <?php foreach ($vistasTabla as $vistaTabla){ ?>
         <option value="<?php echo $vistaTabla->getNombre(); ?>"<?php if(isset($_GET['vista'])){ if($_GET['vista'] === $vistaTabla->getNombre()){ echo " selected"; } }?>><?php echo $vistaTabla->getNombre(); ?></option>
-        <?php endforeach; ?>
+      <?php } ?>
       </select>
       <?php
     }
     ?>
+    <a href="createViewyaa.php?tabla=<?php echo $tabla; ?>" class="btn btn-lg ml-1 mb-3 btnVioleta"><i class="fa fa-plus"></i></a>
+    <?php
+    if(isset($_GET['vista'])){
+      ?>
+      <h1 class="text-center txtVioletaOscur font-weight-bold"><?php echo $vista." (".$tabla.")"; ?></h1>
+
+      <table id="vista<?php echo $vista; ?>" class="table table-reflow tablaVioleta font-weight-bold">
+          <?php
+            $nuevo = new $vista();
+            $claves = array_keys($nuevo->toArrayToView());
+            foreach ($claves as $clave) {
+              ?>
+              <th class="tablaVioletaHeader text-center pt-3"><?php echo $clave; ?></th>
+              <?php
+            }
+
+          ?>
+            <?php
+        if(sizeof($objetosVista) > 0){
+        $claro1 = false;
+        $fondo = "";
+        $cont = 1;
+          foreach ($objetosVista as $objeto) {
+          ?>
+          <tr>
+            <?php
+              $campos = $objeto->toArrayToView();
+              foreach ($campos as $campo) {
+                ?>
+                <td class="txtVioletaP text-center pt-4 <?php
+                if($claro1){
+                  $fondo = "fondoVioleta1";
+                }else{
+                  $fondo = "fondoVioleta0";
+                }
+                echo $fondo;
+                ?>"><?php echo $campo; ?></td>
+                <?php
+              }
+             ?>
+          </tr>
+          <?php
+          $claro1 = !$claro1;
+          $cont++;
+          }
+         ?>
+      </table>
+      <?php
+      }
+    }else{
+      ?>
+
     <h1 class="text-center txtVioletaOscur font-weight-bold"><?php echo $tabla; ?></h1>
 
     <table id="tabla<?php echo $tabla; ?>" class="table table-reflow tablaVioleta font-weight-bold">
@@ -26,7 +78,7 @@
           }
 
         ?>
-        <th class="tablaVioletaHeader text-center"><button type="button" data-toggle="modal" data-target="#exampleModal" class="btn w-100 h-100"><i class="fa fa-plus w-100 h-100"></i></button></th>
+        <th class="tablaVioletaHeader text-center"><button type="button" data-toggle="modal" data-target="#exampleModal" class="btn w-100 h-100" onclick="resetValuesModal()"><i class="fa fa-plus w-100 h-100"></i></button></th>
       <?php
       if(sizeof($objetos) > 0){
       $claro1 = false;
@@ -90,32 +142,47 @@
               ?>
               </label>
               <?php
-              switch($columna->getTipo()){
-                case "int":
-                  ?>
-                  <input type="number" id="<?php echo $columna->getNombre();?>" value="0" name="<?php echo $columna->getNombre();?>" maxlength="<?php echo $columna->getLength();?>" value="" class="form-control-lg text-center mb-3 w-100 inputVioleta">
+              if(isset($tablaRelated) && $columna->getNombre() === $campoFK){
+                ?>
+                <select id="<?php echo $columna->getNombre();?>" name="<?php echo $columna->getNombre();?>" class="form-control-lg text-center mb-3 w-100 inputVioleta sinFlecha">
+                  <option value=""></option>
                   <?php
-                break;
-                case "timestamp":
+                  foreach ($objetosRelated as $objetoRelated) {
+                    ?>
+                    <option value="<?php echo $objetoRelated->toArrayToView()[$campoRelated];?>"><?php echo implode(" ",$objetoRelated->toArrayToView());?></option>
+                    <?php
+                  }
                   ?>
-                  <input type="datetime-local" id="<?php echo $columna->getNombre();?>" value="<?php echo date("Y-m-d H:i:s",time()); ?>" name="<?php echo $columna->getNombre();?>" class="form-control-lg text-center mb-3 w-100 inputVioleta">
-                  <?php
-                break;
-                case "date":
-                  ?>
-                  <input type="date" id="<?php echo $columna->getNombre();?>" name="<?php echo $columna->getNombre();?>" class="form-control-lg text-center mb-3 w-100 inputVioleta">
-                  <?php
-                break;
-                case "double":
-                  ?>
-                  <input type="text" id="<?php echo $columna->getNombre();?>" name="<?php echo $columna->getNombre();?>" value="0.0" class="form-control-lg text-center mb-3 w-100 inputVioleta">
-                  <?php
-                break;
-                default:
-                  ?>
-                  <input type="text" id="<?php echo $columna->getNombre();?>" name="<?php echo $columna->getNombre();?>" maxlength="<?php echo $columna->getLength();?>" value="" class="form-control-lg text-center mb-3 w-100 inputVioleta">
-                  <?php
-                break;
+                </select>
+                <?php
+              }else{
+                switch($columna->getTipo()){
+                  case "int":
+                    ?>
+                    <input type="number" id="<?php echo $columna->getNombre();?>" value="0" name="<?php echo $columna->getNombre();?>" maxlength="<?php echo $columna->getLength();?>" value="" class="form-control-lg text-center mb-3 w-100 inputVioleta">
+                    <?php
+                  break;
+                  case "timestamp":
+                    ?>
+                    <input type="datetime-local" id="<?php echo $columna->getNombre();?>" value="<?php echo date("Y-m-d H:i:s",time()); ?>" name="<?php echo $columna->getNombre();?>" class="form-control-lg text-center mb-3 w-100 inputVioleta">
+                    <?php
+                  break;
+                  case "date":
+                    ?>
+                    <input type="date" id="<?php echo $columna->getNombre();?>" name="<?php echo $columna->getNombre();?>" class="form-control-lg text-center mb-3 w-100 inputVioleta">
+                    <?php
+                  break;
+                  case "double":
+                    ?>
+                    <input type="text" id="<?php echo $columna->getNombre();?>" name="<?php echo $columna->getNombre();?>" value="0.0" class="form-control-lg text-center mb-3 w-100 inputVioleta">
+                    <?php
+                  break;
+                  default:
+                    ?>
+                    <input type="text" id="<?php echo $columna->getNombre();?>" name="<?php echo $columna->getNombre();?>" maxlength="<?php echo $columna->getLength();?>" value="" class="form-control-lg text-center mb-3 w-100 inputVioleta">
+                    <?php
+                  break;
+                }
               }
               ?>
 
@@ -127,10 +194,18 @@
       </div>
     </div>
   </div>
-
+  <?php
+  }
+  ?>
   <script>
     function cambioVista(){
       //Obtener el valor del select id="vista" i redirigir a la pagina actual cambiando la variable vista con el valor seleccionado
+      var vistaSelected = document.getElementById('vista').value;
+      if(vistaSelected !== ""){
+        window.location="listaTabla.php?tabla=<?php echo $tabla; ?>&vista="+vistaSelected;
+      }else{
+        window.location="listaTabla.php?tabla=<?php echo $tabla; ?>";
+      }
     }
   </script>
 

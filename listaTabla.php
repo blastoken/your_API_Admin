@@ -5,6 +5,7 @@ require 'database/QueryBuilder.php';
 require 'database/RootDB.php';
 require 'entities/ColumnaTabla.php';
 require 'entities/Vista.php';
+require 'entities/Index.php';
 require 'utils/utilidades.php';
 
 if(!isset($_SESSION['usuarioLogueado'])){
@@ -23,12 +24,15 @@ if(isset($_GET['tabla'])){
   $queryBuilder = new QueryBuilder($connection,$tabla,$tabla);
   try {
     $vistasTabla = $rootDB->findViewByBBDDAndTable($_SESSION['bdActiva'],$tabla);
-    var_dump($vistasTabla);
+
     //Insertar nuevos campos
     if(isset($_POST['insertar'])){
       array_pop($_POST);
       $objeto = new $tabla();
       $objeto->setFromArray($_POST);
+      /*Controlar que ningún campo esté vacío
+      /-------------------------------------/
+      */
       $queryBuilder->save($objeto);
       header("Location: listaTabla.php?tabla=".$tabla);
       die();
@@ -60,13 +64,28 @@ if(isset($_GET['tabla'])){
 
     if(isset($_GET['vista'])){
       $vista = $_GET['vista'];
-      //Falta la creació de l'entitat de la vista
-      //Després s'obté l'entitat i els resultats de la seua execució (array del select efectuat)
-      //Una volta tenim totes les dades falta carregar una taula de la vista amb els resultats
+      //S'obté l'entitat i els resultats de la seua execució (array del select efectuat)
+      require_once "entities/".$_SESSION['bdActiva']."/".$tabla."/".$vista.".php";
+      $queryBuilderVista = new QueryBuilder($connection, $vista, $vista);
+      $objetosVista = $queryBuilderVista->findAll();
+    }else{
+      $indexes = $rootDB->getAllIndexesFromDB($_SESSION['bdActiva']);
+      $indexes = getTableIndexes($indexes);
+      $indexesThis = $indexes[$tabla];
+      if(sizeof($indexesThis) > 0){
+        $tablaRelated = $indexesThis[0]->getTablaRef();
+        $campoRelated = $indexesThis[0]->getColumnaRef();
+        $campoFK = $indexesThis[0]->getColumna();
+        require_once "entities/".$_SESSION['bdActiva']."/".$tablaRelated.".php";
+        $queryBuilderRelated = new QueryBuilder($connection, $tablaRelated, $tablaRelated);
+        $objetosRelated = $queryBuilderRelated->findAll();
+      }
     }
 
   }catch(QueryBuilderException $queryBuilderException){
       array_push($_SESSION['errores'],$queryBuilderException->getMessage());
+  }catch(PDOException $pdoException){
+      array_push($_SESSION['errores'],$pdoException->getMessage());
   }
 
   if(sizeof($_SESSION['errores']) == 0){
