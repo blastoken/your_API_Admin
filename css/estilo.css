@@ -325,3 +325,11 @@ label:hover:before {
 .oculto{
   display: none;
 }
+
+.iconoGrande{
+  font-size: 28px;
+}
+
+.txtVioletaMedioClar{
+  color: var(--violetaMedioClaro);
+}

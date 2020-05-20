@@ -62,6 +62,7 @@ try{
 }catch(QueryBuilderException $queryBuilderException){
   array_push($_SESSION['errores'],array($queryBuilderException->getMessage()));
 }
+
 include_once("views/partials/header.view.php");
 include_once("views/partials/controlPanel.view.php");
 include_once("views/apiAdmin/bbddyaa.view.php");

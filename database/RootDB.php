@@ -83,6 +83,30 @@ class RootDB
       return $pdoStatement->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, "ColumnaTabla");
     }
 
+    public function getAllViewsColumnsFromDB($nombbdd){
+      $sql="SELECT COLUMN_NAME as 'nombre', TABLE_NAME AS 'tabla', DATA_TYPE as 'tipo',
+            CASE DATA_TYPE
+            WHEN 'varchar' THEN CHARACTER_MAXIMUM_LENGTH
+            WHEN 'int' THEN (NUMERIC_PRECISION+1)
+            WHEN 'double' THEN CONCAT(NUMERIC_PRECISION,'.',NUMERIC_SCALE)
+            ELSE ''
+            END as 'length', EXTRA AS 'extra', COLUMN_KEY AS 'indice'
+            FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_SCHEMA = :nombbdd AND TABLE_NAME IN (
+              SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='VIEW' AND TABLE_SCHEMA = :nombbdd2
+            );";
+      $pdoStatement=$this->connection->prepare($sql);
+      $nombbdd = htmlspecialchars(strip_tags($nombbdd));
+      $nombbdd2 = $nombbdd;
+      $pdoStatement->bindParam(":nombbdd", $nombbdd);
+      $pdoStatement->bindParam(":nombbdd2", $nombbdd2);
+
+      if($pdoStatement->execute()===false){
+          throw new QueryBuilderException("No se han podido leer las vistas de la Base de Datos...");
+      }
+      return $pdoStatement->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, "ColumnaTabla");
+    }
+
     public function getAllColumnsFromTable($nombbdd, $nomTaula){
       $sql="SELECT COLUMN_NAME as 'nombre', TABLE_NAME AS 'tabla', DATA_TYPE as 'tipo',
             CASE DATA_TYPE
@@ -166,6 +190,23 @@ class RootDB
         $pdoStatement->bindParam(":bbdd", $bbdd);
         $nombbdd = htmlspecialchars(strip_tags($tabla));
         $pdoStatement->bindParam(":tabla", $tabla);
+        if($pdoStatement->execute()===false){
+            throw new QueryBuilderException("No se ha podido ejecutar la Query");
+        }
+        return $pdoStatement->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE,
+            'Vista');
+
+    }
+
+    /**
+     * @return array
+     * @throws QueryBuilderException
+     */
+    public function findViewsByBBDD($bbdd):array{
+        $sql="SELECT * FROM vistas WHERE bbdd = :bbdd";
+        $pdoStatement=$this->connection->prepare($sql);
+        $nombbdd = htmlspecialchars(strip_tags($bbdd));
+        $pdoStatement->bindParam(":bbdd", $bbdd);
         if($pdoStatement->execute()===false){
             throw new QueryBuilderException("No se ha podido ejecutar la Query");
         }

@@ -37,6 +37,21 @@ class QueryBuilder{
     }
 
     /**
+     * @return array
+     * @throws QueryBuilderException
+     */
+     public function findAllOrderBy($campo, $orden):array{
+         $sql="SELECT * FROM $this->tabla ORDER BY $campo $orden;";
+         $pdoStatement=$this->connection->prepare($sql);
+         if($pdoStatement->execute()===false){
+             throw new QueryBuilderException("No se ha podido ejecutar la Query");
+         }
+         return $pdoStatement->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE,
+             $this->classEntity);
+
+     }
+
+    /**
      * @param $entity
      * @throws QueryException
      */
@@ -61,9 +76,34 @@ class QueryBuilder{
      * @param $entity
      * @throws QueryBuilderException
      */
-    public function update($entity,$nomId,$valorId){
+    public function update($entity, $nomId, $valorId){
         try{
             $parameters=$entity->toArray();
+            $update=[];
+            foreach ($parameters as $key=>$valor){
+                $update[] = "$key = :$key";
+            }
+            $sql=sprintf(
+                'UPDATE %s SET %s WHERE %s=%s',
+                $this->tabla,
+                implode(',', $update),
+                $nomId,
+                $valorId
+            );
+            $pdoStatement=$this->connection->prepare($sql);
+            $pdoStatement->execute($parameters);
+        }catch(PDOException $exception){
+            throw new QueryBuilderException('Error al modificar ' . $sql);
+        }
+    }
+
+    /**
+     * @param $entity
+     * @throws QueryBuilderException
+     */
+    public function updateBy($array, $nomId, $valorId){
+        try{
+            $parameters=$array;
             $update=[];
             foreach ($parameters as $key=>$valor){
                 $update[] = "$key = :$key";
@@ -113,6 +153,32 @@ class QueryBuilder{
         if ($pdoStatement->execute()===false)
             throw new QueryBuilderException("No se ha podido ejecutar la query");
         return $pdoStatement->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->classEntity)[0];
+    }
+
+    /**
+     * @return array
+     * @throws QueryBuilderException
+     */
+    public function findBy($nomcamp, $valorcamp){
+        $sql="SELECT * FROM $this->tabla WHERE $nomcamp = :valorcamp";
+        $pdoStatement=$this->connection->prepare($sql);
+        $passbbdd = htmlspecialchars(strip_tags($valorcamp));
+        $pdoStatement->bindParam(":valorcamp", $valorcamp);
+        if ($pdoStatement->execute()===false)
+            throw new QueryBuilderException("No se ha podido ejecutar la query");
+        return $pdoStatement->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->classEntity);
+    }
+
+    /**
+     * @return array
+     * @throws QueryBuilderException
+     */
+    public function findByOrderBy($nomcamp, $valorcamp, $campo, $orden){
+        $sql="SELECT * FROM $this->tabla WHERE $nomcamp = $valorcamp ORDER BY $campo $orden;";
+        $pdoStatement=$this->connection->prepare($sql);
+        if ($pdoStatement->execute()===false)
+            throw new QueryBuilderException("No se ha podido ejecutar la query");
+        return $pdoStatement->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->classEntity);
     }
 
 }

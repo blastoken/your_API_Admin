@@ -32,15 +32,15 @@
         <h3 class="txtVioletaOscur m-2 font-weight-bolder col-12 text-center">Preguntas frecuentes (FAQ)</h3>
         <a href="#CrearBaseDatos" class="pregunta col-11 m-2 mt-3 font-weight-bolder" onclick="mostrarOcultarFAQ(0)">¿Cómo creo una Base de Datos?</a>
         <div id="oculto0" class="col-11 p-2 infoOculta oculto">
-          <h3>buenas tardes señores, que tal?</h3>
+          <h3 class="txtVioletaP">Accede al apartado de Bases de Datos > pulsa el botón de añadir <button class="btn btnVioleta"><i class="fa fa-plus"></i></button> y introduce el nombre que quieres que tenga la base de datos y un usuario y una contraseña para ella.</h3>
         </div>
         <a href="#CrearAPI" class="pregunta col-11 m-2 mt-3 font-weight-bolder" onclick="mostrarOcultarFAQ(1)">¿Qué necesito para crear una API?</a>
         <div id="oculto1" class="col-11 p-2 infoOculta oculto">
-          <h3>buenas tardes señores, que tal?</h3>
+          <h3 class="txtVioletaP">Necesitarás de una base de datos para el almacenado y la gestión de tus datos a través de la API.</h3>
         </div>
         <a href="#MuestraInfo" class="pregunta col-11 m-2 mt-3 font-weight-bolder" onclick="mostrarOcultarFAQ(2)">¿Cómo muestro la información de varias tablas?</a>
         <div id="oculto2" class="col-11 p-2 infoOculta oculto">
-          <h3>buenas tardes señores, que tal?</h3>
+          <h3 class="txtVioletaP">Relacionando las tablas con la opción <button class="btn btnVioleta"><i class="fa fa-object-group"></i></button> y creando una vista que muestre los campos que desees de estas tablas. <i>Las vistas</i> puedes crearlas en el menú de cada tabla dentro de la opción <b>Creador de Vistas</b>.</h3>
         </div>
         <a href="#UtilizarAPICreada" class="pregunta col-11 m-2 mt-3 font-weight-bolder" onclick="mostrarOcultarFAQ(3)">¿Cómo utilizo la API que he creado desde mi App?</a>
         <div id="oculto3" class="col-11 p-2 infoOculta oculto">
@@ -54,10 +54,15 @@
         var faq = document.getElementById("faq");
         var seleccionado = document.getElementById("oculto"+num);
         var ocultos = document.getElementsByClassName("infoOculta");
-        for (var i = 0; i < ocultos.length; i++) {
-          ocultos[i].classList.add("oculto");
+
+        if(seleccionado.classList.contains("oculto")){
+          for (var i = 0; i < ocultos.length; i++) {
+            ocultos[i].classList.add("oculto");
+          }
+          seleccionado.classList.remove("oculto");
+        }else{
+          seleccionado.classList.add("oculto");
         }
-        seleccionado.classList.remove("oculto");
       }
   </script>
 </div>

@@ -492,4 +492,339 @@ function getSelectedColumnasView($columnasVista, $tablas){
   return $camposVista;
 }
 
+function getVistasPorTabla($vistas, $tablas){
+  $vistasByTable = [];
+  foreach ($tablas as $tabla) {
+    $vistasByTable[$tabla] = [];
+    foreach ($vistas as $vista) {
+      if($vista->getTabla() === $tabla){
+        array_push($vistasByTable[$tabla],$vista);
+      }
+    }
+  }
+  return $vistasByTable;
+}
+
+function createAPIDocument($snippets, $docu, $api){
+  $ruta = "apis";
+  if(!file_exists($ruta)){
+    mkdir($ruta);
+  }
+  $ruta .="/".$api['nombre'];
+  if(!file_exists($ruta)){
+    mkdir($ruta);
+  }
+  $ficheroApi = fopen($ruta."/".$docu->getNombre().".php","w");
+  $content = "<?php";
+  $content .= "
+  header(\"Access-Control-Allow-Origin: *\");
+  header(\"Content-Type: application/json; charset=UTF-8\");
+
+  require '../../database/Connection.php';
+  require '../../database/QueryBuilder.php';
+  require '../../entities/API.php';
+  require '../../".getRequireTableView($docu,$api['bbdd'])."';
+
+  $"."config = require_once '../../app/ddbbs/".$api['bbdd'].".php';
+  $"."connection = Connection::make($"."config['database']);
+  $"."queryBuilder = new QueryBuilder($"."connection,'".getAPIView($docu)."','".getAPIView($docu)."');
+
+  $"."apiID = ".$api['id'].";
+  $"."configLocal = require_once '../../app/local.php';
+  $"."connectionLocal = Connection::make($"."configLocal['database']);
+  $"."queryBuilderLocal = new QueryBuilder($"."connectionLocal, 'api', 'API');
+  $"."api = $"."queryBuilderLocal->findBy('id',$"."apiID)[0];
+  $"."json = json_decode(file_get_contents(\"php://input\"));
+
+  if(isset($"."json->apiUser) && isset($"."json->apiPassword)){
+  if($"."json->apiUser === $"."api->getUsuario() && password_verify($"."json->apiPassword, $"."api->getPass())){
+  ";
+
+  //Comprobación de las credenciales de la api
+
+  $content .= getContentByAction($docu, $api['bbdd'], $snippets);
+
+  $content .= "
+  }else{
+    http_response_code(404);
+
+    echo json_encode(
+        array(\"error\" => \"Las credenciales de la API son incorrectas...\")
+    );
+  }
+  }else {
+    http_response_code(404);
+
+    echo json_encode(
+        array(\"error\" => \"No se encontraron las credenciales...\")
+    );
+  }
+  ?>";
+  fwrite($ficheroApi,$content);
+  fclose($ficheroApi);
+}
+
+function getAPIView($docu){
+  if($docu->getVista()==="default"){
+    return $docu->getTabla();
+  }else{
+    return $docu->getVista();
+  }
+}
+
+function getRequireTableView($docu, $bbdd):string{
+  $content = "";
+
+  if($docu->getVista() === "default"){
+    //Vista por defecto de la tabla
+    $content = "entities/".$bbdd."/".$docu->getTabla().".php";
+  }else{
+    $content = "entities/".$bbdd."/".$docu->getTabla()."/".$docu->getVista().".php";
+  }
+
+  return $content;
+}
+
+function getContentByAction($docu, $bbdd, $snippets):string{
+  $content = "";
+    require ''.getRequireTableView($docu, $bbdd).'';
+    $nombreEntity = getAPIView($docu);
+    $entity = new $nombreEntity();
+    $campos = array_keys($entity->toArray());
+
+    switch($docu->getAccion()){
+      case 'Create':
+        $content .= getContentCreate($nombreEntity, $campos);
+        break;
+      case 'Read':
+        $content .= "
+  $"."campo = \"".$snippets[0]->getCampo()."\";
+  $"."orden = \"".$snippets[0]->getModo()."\";";
+        $content .= getContentRead();
+        break;
+      case 'ReadBy':
+        $content .= "
+  if(isset($"."json->".$snippets[0]->getCampo().")){
+  $"."campoWhere = \"".$snippets[0]->getCampo()."\";
+  $"."valor = $"."json->$"."campoWhere;
+  $"."campo = \"".$snippets[1]->getCampo()."\";
+  $"."orden = \"".$snippets[1]->getModo()."\";";
+        $content .= getContentReadBy($snippets);
+        break;
+      case 'Update':
+        $campsUpdate = separarSnippetsDeId($snippets);
+        $nomId = $campsUpdate['id'][0];
+        $updateSnippetsNames = $campsUpdate['snippets'];
+
+        $camposIsset = getCamposIsset($campos);
+        $content .= "
+  if(".implode(' && ', $camposIsset)."){
+  $"."idName = \"".$nomId."\";
+  $"."valorId = $"."json->$nomId;
+  $"."array = [];";
+        foreach ($updateSnippetsNames as $usn) {
+          $content .= "
+  $"."array['".$usn."'] = $"."json->".$usn.";";
+        }
+        $content .= getContentUpdate();
+        break;
+      case 'Delete':
+        $content .= "
+  if(isset($"."json->".$snippets[0]->getCampo().")){
+  $"."idName = \"".$snippets[0]->getCampo()."\";
+  $"."valorId = $"."json->".$snippets[0]->getCampo().";";
+        $content .= getContentDelete();
+        $content .="
+  }else{
+    http_response_code(404);
+
+    echo json_encode(
+        array(\"error\" => \"Falta el campo '".$snippets[0]->getCampo()."' en el JSON...\")
+    );
+  }";
+        break;
+    }
+
+  return $content;
+}
+
+function getCamposIsset($campos):array{
+  $camposIsset = [];
+  foreach ($campos as $campo) {
+    array_push($camposIsset,"isset($"."json->$campo)");
+  }
+  return $camposIsset;
+}
+
+function getContentCreate($nombreEntity,$campos):string{
+  $content = "";
+  $camposIsset = getCamposIsset($campos);
+  $content .= "
+  $"."entity = new ".$nombreEntity."();
+  $"."campos = array_keys($"."entity->toArray());
+  if(".implode(' && ', $camposIsset)."){
+  ";
+  foreach ($campos as $clave) {
+    $content .= "
+  $"."entity->set".ucfirst($clave)."($"."json->".$clave.");";
+  }
+
+  $content .="
+    try{
+      $"."queryBuilder->save($"."entity);
+
+      http_response_code(200);
+
+      echo json_encode(
+          array(\"message\" => \"Insertado correctamente!\")
+      );
+
+    }catch(QueryBuilderException $"."queryBuilderException){
+        http_response_code(404);
+
+        echo json_encode(
+            array(\"error\" => $"."queryBuilderException->getMessage())
+        );
+    }
+  }else{
+    http_response_code(404);
+
+    echo json_encode(
+        array(\"error\" => \"Faltan campos en el JSON!!\")
+    );
+  }";
+  return $content;
+}
+
+function getContentRead():string{
+  return "
+  try{
+    $"."objects = "."$"."queryBuilder->findAllOrderBy($"."campo, $"."orden);
+
+    $"."response = [];
+    foreach ($"."objects as $"."object) {
+      array_push($"."response, $"."object->toArrayToView());
+    }
+
+    http_response_code(200);
+
+    echo json_encode($"."response);
+
+  }catch(QueryBuilderException $"."queryBuilderException){
+      http_response_code(404);
+
+      echo json_encode(
+          array(\"error\" => $"."queryBuilderException->getMessage())
+      );
+  }";
+}
+
+function getContentReadBy($snippets):string{
+  return "
+  try{
+    $"."objects = "."$"."queryBuilder->findByOrderBy($"."campoWhere, $"."valor, $"."campo, $"."orden);
+
+    $"."response = [];
+    foreach ($"."objects as $"."object) {
+      array_push($"."response, $"."object->toArrayToView());
+    }
+
+    http_response_code(200);
+
+    echo json_encode($"."response);
+
+  }catch(QueryBuilderException $"."queryBuilderException){
+      http_response_code(404);
+
+      echo json_encode(
+          array(\"error\" => $"."queryBuilderException->getMessage())
+      );
+  }
+  }else{
+    http_response_code(404);
+
+    echo json_encode(
+        array(\"error\" => \"Falta el campo '".$snippets[0]->getCampo()."' en el JSON...\")
+    );
+  }";
+}
+
+function getContentUpdate():string{
+  return "
+  try{
+    $"."queryBuilder->updateBy($"."array, $"."idName, $"."valorId);
+
+    http_response_code(200);
+
+    echo json_encode(
+        array(\"message\" => \"Actualizado correctamente!\")
+    );
+
+  }catch(QueryBuilderException $"."queryBuilderException){
+      http_response_code(404);
+
+      echo json_encode(
+          array(\"error\" => $"."queryBuilderException->getMessage())
+      );
+  }
+  }else{
+    http_response_code(404);
+
+    echo json_encode(
+        array(\"error\" => \"Faltan campos en el JSON...\")
+    );
+  }
+  ";
+}
+
+function getContentDelete(){
+  return "
+  try{
+    $"."queryBuilder->delete($"."idName, $"."valorId);
+
+    http_response_code(200);
+
+    echo json_encode(
+        array(\"message\" => \"Eliminado correctamente!\")
+    );
+
+  }catch(QueryBuilderException $"."queryBuilderException){
+      http_response_code(404);
+
+      echo json_encode(
+          array(\"error\" => $"."queryBuilderException->getMessage())
+      );
+  }";
+}
+
+function separarSnippetsDeId($snippets):array{
+  $campos = [];
+  $campos['id'] = [];
+  $campos['snippets'] = [];
+  foreach ($snippets as $snippet) {
+    if($snippet->getAccion() === "IDActualizar"){
+      array_push($campos['id'], $snippet->getCampo());
+    }else{
+      array_push($campos['snippets'], $snippet->getCampo());
+    }
+  }
+  return $campos;
+}
+
+function getSnippetsFromDocus($docus, $qbs):array{
+  $snippets = [];
+  $idsDocus = [];
+  foreach ($docus as $docu) {
+    if(!in_array($docu->getId(),$idsDocus)){
+      array_push($idsDocus, $docu->getId());
+    }
+  }
+
+  foreach ($idsDocus as $id) {
+    $snippets[strval($id)] = [];
+    array_push($snippets[strval($id)], $qbs->findBy('docu', $id));
+  }
+  return $snippets;
+}
+
 ?>

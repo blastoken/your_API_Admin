@@ -125,7 +125,6 @@
         <?php
       }
       ?>
-      console.log(tablasbd);
       var tablaValue = document.getElementById('tabla'+cont).value;
       var campoSelect = document.getElementById('campo'+cont);
       campoSelect.innerHTML = '';
