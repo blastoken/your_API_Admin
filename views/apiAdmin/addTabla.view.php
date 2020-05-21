@@ -291,9 +291,104 @@
         }
         count++;
         var container = document.getElementById("contenedorAdds");
-        container.innerHTML += "<?php if(isset($_GET['tabla'])){ echo "<div class='col-1 pb-3'></div>"; } ?><input type='text' id='campo"+count+"Nombre' name='campo"+count+"Nombre' class='col-3 form-control-lg text-center mb-3 w-100 inputVioleta'><input type='number' id='campo"+count+"Length' name='campo"+count+"Length' min='1' max='1' value='1' class='col-2 form-control-lg text-center mb-3 w-100 inputVioleta'><select id='campo"+count+"Tipo' name='campo"+count+"Tipo' class='col-<?php if(isset($_GET['tabla'])){ echo "2"; }else{ echo "3"; } ?> form-control-lg text-center mb-3 w-100 inputVioleta sinFlecha' onchange='onChangeTipoToLength("+count+")'><option value=''></option><option value='int'>int</option><option value='varchar'>varchar</option><option value='text'>text</option><option value='timestamp'>timestamp</option><option value='tinyint'>tinyint</option><option value='double'>double</option><option value='date'>date</option></select><p class='col-2'></p><p class='col-2'><input name='campo"+count+"NON' type='checkbox' id='campo"+count+"NON' value='NOT_NULL'><label for='campo"+count+"NON' class='form-control-lg w-100 txtVioletaP'> NOT_NULL</label></p>";
+        <?php if(isset($_GET['tabla'])){ ?>
+        var divIntro = document.createElement('div');
+        divIntro.classList.value="col-1 pb-3";
+        container.appendChild(divIntro);
+        <?php }?>
+
+        var inputNombre = document.createElement('input');
+        inputNombre.type = "text";
+        inputNombre.id = "campo"+count+"Nombre";
+        inputNombre.name = "campo"+count+"Nombre";
+        inputNombre.classList.value = "col-3 form-control-lg text-center mb-3 w-100 inputVioleta";
+        container.appendChild(inputNombre);
+
+        var inputLength = document.createElement('input');
+        inputLength.type = "number";
+        inputLength.id = "campo"+count+"Length";
+        inputLength.name = "campo"+count+"Length";
+        inputLength.min='1';
+        inputLength.max='1';
+        inputLength.classList.value = "col-2 form-control-lg text-center mb-3 w-100 inputVioleta";
+        container.appendChild(inputLength);
+
+        var selectTipo = document.createElement('select');
+        selectTipo.id = "campo"+count+"Tipo";
+        selectTipo.name = "campo"+count+"Tipo";
+        selectTipo.classList.value = "col-<?php if(isset($_GET['tabla'])){ echo "2"; }else{ echo "3"; } ?> form-control-lg text-center mb-3 w-100 inputVioleta sinFlecha";
+        selectTipo.setAttribute("onchange", function(){});
+        selectTipo.attributes.onchange.nodeValue = "onChangeTipoToLength("+count+")";
+
+        var optionDefault = document.createElement('option');
+        optionDefault.appendChild( document.createTextNode("") );
+        optionDefault.value = "";
+        selectTipo.appendChild(optionDefault);
+
+        var optionInt = document.createElement('option');
+        optionInt.appendChild( document.createTextNode("int") );
+        optionInt.value = "int";
+        selectTipo.appendChild(optionInt);
+
+        var optionVarchar = document.createElement('option');
+        optionVarchar.appendChild( document.createTextNode("varchar") );
+        optionVarchar.value = "varchar";
+        selectTipo.appendChild(optionVarchar);
+
+        var optionText = document.createElement('option');
+        optionText.appendChild( document.createTextNode("text") );
+        optionText.value = "text";
+        selectTipo.appendChild(optionText);
+
+        var optionTimestamp = document.createElement('option');
+        optionTimestamp.appendChild( document.createTextNode("timestamp") );
+        optionTimestamp.value = "timestamp";
+        selectTipo.appendChild(optionTimestamp);
+
+        var optionTinyInt = document.createElement('option');
+        optionTinyInt.appendChild( document.createTextNode("tinyint") );
+        optionTinyInt.value = "tinyint";
+        selectTipo.appendChild(optionTinyInt);
+
+        var optionDouble = document.createElement('option');
+        optionDouble.appendChild( document.createTextNode("double") );
+        optionDouble.value = "double";
+        selectTipo.appendChild(optionDouble);
+
+        var optionDate = document.createElement('option');
+        optionDate.appendChild( document.createTextNode("date") );
+        optionDate.value = "date";
+        selectTipo.appendChild(optionDate);
+
+        container.appendChild(selectTipo);
+
+        var pIntro = document.createElement('p');
+        pIntro.classList.value = "col-2";
+        container.appendChild(pIntro);
+
+        var pNON = document.createElement('p');
+        pNON.classList.value = "col-2";
+
+        var inputNON = document.createElement('input');
+        inputNON.id = "campo"+count+"NON";
+        inputNON.name = "campo"+count+"NON";
+        inputNON.type = "checkbox";
+        inputNON.value = "NOT_NULL";
+        pNON.appendChild(inputNON);
+
+        var labelNON = document.createElement('label');
+        labelNON.htmlFor = "campo"+count+"NON";
+        labelNON.classList.value = "form-control-lg w-100 txtVioletaP";
+        labelNON.appendChild( document.createTextNode("NOT_NULL") );
+        pNON.appendChild(labelNON);
+
+        container.appendChild(pNON);
+
+        //container.innerHTML += "<label for='campo"+count+"NON' class='form-control-lg w-100 txtVioletaP'> NOT_NULL</label></p>";
         document.getElementById("count").value = count;
       }
+
+
 
       function onChangeTipoToLength(num){
         var valueSelected = document.getElementById("campo"+num+"Tipo").value;

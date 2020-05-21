@@ -1,4 +1,4 @@
-<div class="container-fluid" style="background-color: #661aff;">
+<div class="container-fluid" style="background-color: #292b4f;">
   <div class="row p-5 justify-content-center">
     <div id="imgPie" class="col4 rounded align-self-center">
       <img src="imgs/logo_pie_violeta.png" alt="sistema" height="100px">

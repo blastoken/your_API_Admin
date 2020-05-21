@@ -33,13 +33,13 @@ function validarCamposRegistro($usuario){
 }
 
 function esUnaPassFuerte($pass){
-  if($pass === preg_replace('\[a-z\]','',$pass)){
+  if($pass === preg_replace('/[a-z]/','',$pass)){
     return false;
   }
-  if($pass === preg_replace('\[A-Z\]','',$pass)){
+  if($pass === preg_replace('/[A-Z]/','',$pass)){
     return false;
   }
-  if($pass === preg_replace('\[0-9\]','',$pass)){
+  if($pass === preg_replace('/[0-9]/','',$pass)){
     return false;
   }
   return true;

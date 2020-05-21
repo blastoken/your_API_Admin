@@ -58,7 +58,7 @@ if(isset($_POST['crearbd'])){
   }
 }
 try{
-  $todasBasesDatos = $queryBuilder->findAll();
+  $todasBasesDatos = $queryBuilder->findBy('admin',$_SESSION['usuarioLogueado']['id']);
 }catch(QueryBuilderException $queryBuilderException){
   array_push($_SESSION['errores'],array($queryBuilderException->getMessage()));
 }
