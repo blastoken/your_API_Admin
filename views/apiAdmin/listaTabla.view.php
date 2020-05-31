@@ -1,6 +1,7 @@
 <div class="content-container fondoVioleta0">
 
   <div class="container-fluid">
+    <a href="tablasbdyaa.php?bd=<?php echo $_SESSION['bdActiva']; ?>" class="btn btn-lg ml-1 mb-3 btnVioleta"><i class="fa fa-chevron-left"></i></a>
     <?php if (sizeof($vistasTabla) > 0) {
       ?>
       <h4 class="txtVioletaP font-weight-bold col-2">Selecciona una vista</h4>
@@ -78,7 +79,7 @@
           }
 
         ?>
-        <th class="tablaVioletaHeader text-center"><button type="button" data-toggle="modal" data-target="#exampleModal" class="btn w-100 h-100" onclick="resetValuesModal()"><i class="fa fa-plus w-100 h-100"></i></button></th>
+        <th class="tablaVioletaHeader text-center"><button type="button" data-toggle="modal" data-target="#exampleModal" class="btn w-100 h-100" onclick="resetValuesModal('<?php echo date("Y-m-d H:i:s",time()); ?>')"><i class="fa fa-plus w-100 h-100"></i></button></th>
       <?php
       if(sizeof($objetos) > 0){
       $claro1 = false;
@@ -207,6 +208,10 @@
         window.location="listaTabla.php?tabla=<?php echo $tabla; ?>";
       }
     }
+
+
+
+
   </script>
 
   </div>

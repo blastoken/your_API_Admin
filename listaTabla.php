@@ -71,14 +71,16 @@ if(isset($_GET['tabla'])){
     }else{
       $indexes = $rootDB->getAllIndexesFromDB($_SESSION['bdActiva']);
       $indexes = getTableIndexes($indexes);
-      $indexesThis = $indexes[$tabla];
-      if(sizeof($indexesThis) > 0){
-        $tablaRelated = $indexesThis[0]->getTablaRef();
-        $campoRelated = $indexesThis[0]->getColumnaRef();
-        $campoFK = $indexesThis[0]->getColumna();
-        require_once "entities/".$_SESSION['bdActiva']."/".$tablaRelated.".php";
-        $queryBuilderRelated = new QueryBuilder($connection, $tablaRelated, $tablaRelated);
-        $objetosRelated = $queryBuilderRelated->findAll();
+      if(isset($indexes[$tabla])){
+        $indexesThis = $indexes[$tabla];
+        if(sizeof($indexesThis) > 0){
+          $tablaRelated = $indexesThis[0]->getTablaRef();
+          $campoRelated = $indexesThis[0]->getColumnaRef();
+          $campoFK = $indexesThis[0]->getColumna();
+          require_once "entities/".$_SESSION['bdActiva']."/".$tablaRelated.".php";
+          $queryBuilderRelated = new QueryBuilder($connection, $tablaRelated, $tablaRelated);
+          $objetosRelated = $queryBuilderRelated->findAll();
+        }
       }
     }
 

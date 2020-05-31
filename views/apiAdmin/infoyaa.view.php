@@ -38,13 +38,13 @@
         <div id="oculto1" class="col-11 p-2 infoOculta oculto">
           <h3 class="txtVioletaP">Necesitarás de una base de datos para el almacenado y la gestión de tus datos a través de la API.</h3>
         </div>
-        <a href="#MuestraInfo" class="pregunta col-11 m-2 mt-3 font-weight-bolder" onclick="mostrarOcultarFAQ(2)">¿Cómo muestro la información de varias tablas?</a>
+        <a href="#MuestraInfo" class="pregunta col-11 m-2 mt-3 font-weight-bolder h2-md" onclick="mostrarOcultarFAQ(2)">¿Cómo muestro la información de varias tablas?</a>
         <div id="oculto2" class="col-11 p-2 infoOculta oculto">
           <h3 class="txtVioletaP">Relacionando las tablas con la opción <button class="btn btnVioleta"><i class="fa fa-object-group"></i></button> y creando una vista que muestre los campos que desees de estas tablas. <i>Las vistas</i> puedes crearlas en el menú de cada tabla dentro de la opción <b>Creador de Vistas</b>.</h3>
         </div>
         <a href="#UtilizarAPICreada" class="pregunta col-11 m-2 mt-3 font-weight-bolder" onclick="mostrarOcultarFAQ(3)">¿Cómo utilizo la API que he creado desde mi App?</a>
         <div id="oculto3" class="col-11 p-2 infoOculta oculto">
-          <h3>buenas tardes señores, que tal?</h3>
+          <h3 class="txtVioletaP">Para realizar acciones con la API deberás crear documentos que soliciten información a tu base de datos. La creación de los documentos puedes realizarla desde el apartado de documentos de la API utilizando el botón de añadido <button class="btn btnVioleta"><i class="fa fa-plus"></i></button>.<br/> A estos documentos hay que <b>enviarle una petición JSON</b> utilizando el método POST y insertando todos esos campos que solicite este a la <b>URL</b> del documento, toda la información será devuelta también en formato JSON.</h3>
         </div>
       </div>
   </div>

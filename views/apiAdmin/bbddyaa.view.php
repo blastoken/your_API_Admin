@@ -14,13 +14,17 @@
     <?php if(sizeof($todasBasesDatos) > 0){ ?>
     <div class="row justify-content-center align-items-center">
       <?php foreach ($todasBasesDatos as $db) { ?>
-        <a href="tablasbdyaa.php?bd=<?php echo $db->getNombre(); ?>" class="btn col-3 btnVioletaOutline rounded p-5 m-2 text-center text-decoration-none" onmouseover="cambioImagen('<?php echo "imgBBDD".$db->getNombre();  ?>','imgs/bbdd_icon_on_over.png')" onmouseout="cambioImagen('<?php echo "imgBBDD".$db->getNombre();  ?>','imgs/bbdd_icon.png')">
+        <a href="tablasbdyaa.php?bd=<?php echo $db->getNombre(); ?>" class="btn col-sm-11 col-md-5 col-lg-3 col-xl-2 btnVioletaOutline rounded p-5 m-2 text-center text-decoration-none" onmouseover="cambioImagen('<?php echo "imgBBDD".$db->getNombre();  ?>','imgs/bbdd_icon_on_over.png')" onmouseout="cambioImagen('<?php echo "imgBBDD".$db->getNombre();  ?>','imgs/bbdd_icon.png')">
           <img id="<?php echo "imgBBDD".$db->getNombre(); ?>" src="imgs/bbdd_icon.png" alt="bbdd" height="30px">
           <h5 class="font-weight-bold text-monospace"><?php echo $db->getNombre(); ?></h5>
         </a>
       <?php } ?>
     </div>
-  <?php } ?>
+  <?php }else{
+    ?>
+    <h3 class="font-weight-light text-center mt-5 txtVioletaOscur"><i>No has creado ninguna base de datos aún...</i></h3>
+    <?php
+  } ?>
 
     <div class="modal fade bd-example-modal-lg w-100 p-5" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">

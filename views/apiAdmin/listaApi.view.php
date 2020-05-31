@@ -1,6 +1,6 @@
 <div class="content-container fondoVioleta0">
 
-  <div class="container-fluid">
+  <div class="container-fluid fondoVioleta0 pb-5">
 
     <h1 class="text-center txtVioletaOscur font-weight-bold"><?php echo $_SESSION['apiActiva']['nombre'];?></h1>
     <button type="button" class="btn btn-lg mt-1 col-2 btnVioleta"  data-toggle="modal" data-target="#modalCreateDocu">Nuevo documento<i class="fa fa-plus ml-2 font-weight-bold"></i></button>
@@ -13,7 +13,7 @@
         <?php
         foreach($docus as $docu){
           ?>
-            <table id="<?php echo $docu->getNombre();  ?>" class="table table-reflow tablaVioleta font-weight-bold col-3 text-center m-2">
+            <table id="<?php echo $docu->getNombre();  ?>" class="table table-reflow tablaVioleta font-weight-bold col-xs-11 col-sm-11 col-md-5 col-lg-4 col-xl-3 col-xxl-2 text-center m-2">
               <th class="tablaVioletaHeader">
                 <h4 class="font-weight-bold"><i class="fa fa-file font-weight-bold iconoGrande mr-2"></i><?php echo $docu->getNombre(); ?> (<?php echo $docu->getAccion(); ?>)</h4>
               </th>

@@ -70,11 +70,16 @@ function getValuesToModal(tabla, num){
   console.log(num);
 }
 
-function resetValuesModal(){
+function resetValuesModal(fecha){
   var formulario = document.getElementById("formularioModal");
 
   for (var i = 0; i < formulario.elements.length-1; i++) {
-    formulario[i].value = "";
+    console.log(formulario[i]);
+    if(formulario[i].type == "datetime-local"){
+      formulario[i].value = fecha;
+    }else{
+      formulario[i].value = "";
+    }
   }
   formulario.lastElementChild.value = "Insertar";
   formulario.lastElementChild.id = "insertar";

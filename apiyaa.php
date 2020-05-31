@@ -63,7 +63,12 @@ if(isset($_POST['createapi'])){
     $newAPI = new API(0,$_SESSION['usuarioLogueado']['id'],$bbddapi,$nombreapi,$userapi,$passapi);
     try{
       $queryBuilderAPI->save($newAPI);
-      array_push($apis,$newAPI);
+      $apis = $queryBuilderAPI->findBy("admin",$_SESSION['usuarioLogueado']['id']);
+      foreach ($apis as $api) {
+        if($api->getNombre() === $nombreapi){
+          $_SESSION['apiActiva'] = $api->toFullArray();
+        }
+      }
     }catch(QueryBuilderException $queryBuilderException){
       array_push($_SESSION['errores'],$queryBuilderException->getMessage());
     }

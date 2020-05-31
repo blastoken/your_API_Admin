@@ -85,7 +85,7 @@ if(isset($_GET['tabla'])){
     $rootDB = new RootDB($connectionLocal);
     $columnas = $rootDB->getAllColumnsFromTable($_SESSION['bdActiva'], $nomTaula);
     $indexes = $rootDB->getAllIndexesFromTable($_SESSION['bdActiva'], $nomTaula);
-    var_dump($indexes);
+    //var_dump($indexes);
   }catch(QueryBuilderException $queryBuilderException){
       array_push($_SESSION['errores'],array($queryBuilderException->getMessage()));
   }catch(PDOException $pdoException){
@@ -117,7 +117,7 @@ if(isset($_GET['tabla'])){
     }
 
     $alteraciones = getAlteracionesUpdateTable($columnas, $columnasUpdate, $nomTaula);
-    var_dump($alteraciones);
+    //var_dump($alteraciones);
 
     try{
       if(sizeof($alteraciones) > 0){

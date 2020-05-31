@@ -79,7 +79,7 @@
       selectTabla.attributes.onchange.nodeValue = 'cambioTabla('+cont+')';
       selectTabla.classList.value = 'col-3 form-control-lg text-center mb-3 mr-3 w-100 inputVioleta sinFlecha';
       container.appendChild(selectTabla);
-
+      
       console.log(document.getElementById('tabla0'));
       //Creació select id="campoX"
       var optionsCampos = document.getElementById('campo0').children;

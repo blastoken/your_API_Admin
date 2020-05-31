@@ -34,6 +34,7 @@ if(isset($_POST['page'])){
         array_push($_SESSION['errores'],$queryBuilderException->getMessage());
     }
   }
+  
     header("Location: $page");
     die();
 }

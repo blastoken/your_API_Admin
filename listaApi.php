@@ -46,7 +46,6 @@ try{
 
 $_SESSION['page'] = "listaApi.php";
 if(isset($_POST['createdocu'])){
-  var_dump($_POST);
   $nombreDocu = $_POST['nombredocu'];
   $tablaDocu = $_POST['tabladocu'];
   $vistaDocu = $_POST['vistadocu'];

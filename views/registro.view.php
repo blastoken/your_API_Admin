@@ -1,6 +1,6 @@
-<div class="container-fluid">
-  <div class="row fondoVioleta0 justify-content-center align-items-center pt-5 pb-5">
-    <div class="col-sm-12 col-md-8 col-lg-4 col-xl-3 rounded shadow-lg p-5">
+<div class="container-fluid h-75">
+  <div class="row fondoVioleta0 justify-content-center align-items-center pt-5 pb-5 h-100">
+    <div class="col-sm-12 col-md-8 col-lg-6 col-xl-6 rounded shadow-lg p-5">
       <h2 class="font-weight-bold text-center tituloVioleta w-100 pb-3 mb-5 ">Regístrate</h2>
       <?php if(sizeof($todosErrores) > 0){?>
       <div class="alert alert-danger rounded shadow-sm mr-5 ml-5 mt-2" role="alert">

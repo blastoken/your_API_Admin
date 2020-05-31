@@ -174,8 +174,10 @@ class QueryBuilder{
      * @throws QueryBuilderException
      */
     public function findByOrderBy($nomcamp, $valorcamp, $campo, $orden){
-        $sql="SELECT * FROM $this->tabla WHERE $nomcamp = $valorcamp ORDER BY $campo $orden;";
+        $sql="SELECT * FROM $this->tabla WHERE $nomcamp = :valorcamp ORDER BY $campo $orden;";
         $pdoStatement=$this->connection->prepare($sql);
+        $passbbdd = htmlspecialchars(strip_tags($valorcamp));
+        $pdoStatement->bindParam(":valorcamp", $valorcamp);
         if ($pdoStatement->execute()===false)
             throw new QueryBuilderException("No se ha podido ejecutar la query");
         return $pdoStatement->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->classEntity);

@@ -1,15 +1,14 @@
 <div class="content-container fondoVioleta0">
 
   <div class="container-fluid">
-
     <h1 class="text-center txtVioletaOscur font-weight-bold"><?php echo $_SESSION['bdActiva']; ?></h1>
 
-
-      <a href="addTabla.php" title="Crear Tabla" class="btn btn-lg mt-1 btnVioleta m-4">
+      <a href="bbddyaa.php" class="btn btn-lg mt-1 m-4 btnVioleta" title="Atrás"><i class="fa fa-chevron-left p-2"></i></a>
+      <a href="addTabla.php" title="Crear Tabla" class="btn btn-lg mt-1 btnVioleta m-4" title="Crear nueva tabla">
           <i class="fa fa-plus p-2" aria-hidden="true"></i>
       </a>
       <?php if(sizeof($tablas) > 0){ ?>
-      <button type="button" title="Relacionar Tablas" class="btn btn-lg btnVioleta" data-toggle="modal" data-target="#modalIndexes">
+      <button type="button" title="Relacionar Tablas" class="btn btn-lg btnVioleta" title="Relacionar Tablas" data-toggle="modal" data-target="#modalIndexes">
         <i class="fa fa-object-group p-2" aria-hidden="true"></i>
       </button>
       <?php }?>
@@ -20,13 +19,12 @@
       <?php
       foreach ($tablas as $nombre => $columnas) {
         ?>
-        <table id="<?php echo $nombre;  ?>" class="table table-reflow tablaVioleta font-weight-bold col-3 text-center m-2">
+        <table id="<?php echo $nombre;  ?>" class="table table-reflow tablaVioleta font-weight-bold  col-xs-11 col-sm-11 col-md-5 col-lg-4 col-xl-3 col-xxl-2 text-center m-2">
           <th class="tablaVioletaHeader">
             <div class="btn-group row w-100">
               <h3 class="col-10"><?php echo $nombre; ?></h3>
 
-              <button type="button" class="btn col-2 dropdown-toggle text-white"
-                      data-toggle="dropdown">
+              <button type="button" class="btn col-2 dropdown-toggle text-white" data-toggle="dropdown" title="Opciones de la Tabla">
                 <span class="caret"></span>
                 <span class="sr-only">Desplegar menú</span>
               </button>
@@ -65,6 +63,10 @@
       }
       ?>
       </div>
+      <?php
+    }else{
+      ?>
+      <h3 class="font-weight-light text-center mt-5 txtVioletaOscur"><i>No hay tablas en la base de datos aún...</i></h3>
       <?php
     }
     ?>

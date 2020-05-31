@@ -3,31 +3,48 @@
   <div class="container-fluid">
 
   <div class="row justify-content-center align-items-center">
-  <a href="bbddyaa.php" class="btn btn-lg mt-1 col-2 btnVioleta"><i class="fa fa-angle-left mr-2 font-weight-bold"></i>Crear BD</a>
-  <h1 class="col-7 text-center txtVioletaOscur font-weight-bold">Administra tu API</h1>
-  <button type="button" class="btn btn-lg mt-1 col-2 btnVioleta"  data-toggle="modal" data-target="#modalCreateAPI">Crear API<i class="fa fa-plus ml-2 font-weight-bold"></i></button>
+    <?php
+    if(sizeof($todasBasesDatos) > 0){
+      ?>
+    <p class="col-2"></p>
+    <h1 class="col-7 text-center txtVioletaOscur font-weight-bold">Administra tu API</h1>
+    <button type="button" class="btn btn-lg mt-1 col-2 btnVioleta"  data-toggle="modal" data-target="#modalCreateAPI"><span class="d-none d-lg-block">Crear API</span><i class="fa fa-plus ml-2 font-weight-bold"></i></button>
 
-
+      <?php
+    }else{
+      ?>
+      <a href="bbddyaa.php" class="btn btn-lg mt-1 col-2 btnVioleta"><i class="fa fa-angle-left mr-2 font-weight-bold"></i>Crear BD</a>
+      <h1 class="col-7 text-center txtVioletaOscur font-weight-bold">Administra tu API</h1>
+      <p class="col-2"></p>
+      <?php
+    }
+     ?>
 
     <?php
     if(sizeof($todasBasesDatos) > 0){
       ?>
       <hr class="hrVioleta col-11"/>
         <?php
+      if(sizeof($apis) > 0){
         foreach($apis as $api){
           ?>
-          <button type="button" class="btn btn-lg btnVioletaOutline p-5 m-2 col-3" data-toggle="modal" data-target="#exampleModal" onclick="insertModalBD('<?php echo $api->getNombre(); ?>')">
+          <button type="button" class="btn btn-lg btnVioletaOutline p-5 m-2 col-sm-11 col-md-5 col-lg-3 col-xl-2" data-toggle="modal" data-target="#exampleModal" onclick="insertModalBD('<?php echo $api->getNombre(); ?>')">
             <i class="fa fa-code font-weight-bold iconoGrande"></i>
             <h5 class="font-weight-bold text-monospace"><?php echo $api->getNombre(); ?></h5>
           </button>
           <?php
         }
+      }else{
+        ?>
+        <h3 class="txtVioletaOscur text-center mt-3">No tienes ninguna API creada aún...</h3>
+        <?php
+      }
         ?>
 
       <?php
     }else{
       ?>
-      <h3 class="txtVioletaOscur text-center">No tienes ninguna base de datos creada para gestionar por API...</h3>
+      <h3 class="txtVioletaOscur text-center mt-3">No tienes ninguna base de datos creada para gestionar por API...</h3>
       <?php
     }
      ?>

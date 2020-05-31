@@ -1,5 +1,6 @@
 <?php
 session_start();
+error_reporting(0);
 require 'database/Connection.php';
 require 'database/RootDB.php';
 require 'database/RootTable.php';
